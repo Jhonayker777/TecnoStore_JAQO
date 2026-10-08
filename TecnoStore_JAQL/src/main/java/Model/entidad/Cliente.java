@@ -9,6 +9,7 @@ public class Cliente extends Persona {
     private int UMBRAL_FRECUENTE = 3;
     private  LocalDateTime fechaRegistro;
     private List<Venta> compras;
+    private String contraseña;
 
     private Cliente(Builder b) {
         super(b.id, b.nombre, b.identificacion, b.correo, b.telefono);
@@ -57,7 +58,8 @@ public class Cliente extends Persona {
                 .correo(this.getCorreo())
                 .telefono(this.getTelefono())
                 .fechaRegistro(this.fechaRegistro)
-                .compras(this.compras);
+                .compras(this.compras)
+                .contraseña(this.contraseña);
     }
 
     public static class Builder {
@@ -69,6 +71,7 @@ public class Cliente extends Persona {
         private String telefono;
         private LocalDateTime fechaRegistro;
         private List<Venta> compras;
+        private String contraseña;
 
         public Builder id(int id) {
             this.id = id;
@@ -107,6 +110,11 @@ public class Cliente extends Persona {
 
         public Cliente build() {
             return new Cliente(this);
+        }
+        
+        public Builder contraseña(String t){
+            this.contraseña = t;
+            return this;
         }
     }
 

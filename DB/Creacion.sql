@@ -1,6 +1,6 @@
 
 DROP DATABASE IF EXISTS TecnoStore_JAQO;
-CREATE DATABASE TecnoStore_JAQO
+CREATE DATABASE TecnoStore_JAQO;
 
 USE TecnoStore_JAQO;
 
@@ -34,6 +34,7 @@ CREATE TABLE personas (
 CREATE TABLE clientes (
     persona_id     INT PRIMARY KEY,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    contraseña    VARCHAR(20) NOT NULL,
 
     CONSTRAINT fk_cliente_persona FOREIGN KEY (persona_id)
         REFERENCES personas(id)
@@ -43,10 +44,11 @@ CREATE TABLE clientes (
 CREATE TABLE empleados (
     persona_id     INT PRIMARY KEY,
     cargo          ENUM('Vendedor','Admin','Bodega','Gerente') NOT NULL,
-    salario        DECIMAL(12,2) NOT NULL,
+    salario        DOUBLE NOT NULL,
     moneda         CHAR(3) NOT NULL DEFAULT 'COP',
     fecha_ingreso  DATE NOT NULL,
     activo         BOOLEAN NOT NULL DEFAULT TRUE,
+    contraseña     VARCHAR(20) NOT NULL,
 
     CONSTRAINT fk_empleado_persona FOREIGN KEY (persona_id)
         REFERENCES personas(id)
@@ -58,9 +60,9 @@ CREATE TABLE celulares (
     id       INT AUTO_INCREMENT PRIMARY KEY,
     marca_id INT NOT NULL,
     modelo   VARCHAR(80) NOT NULL,
-    so_id    INT NOT NULL, --Sistema operativo
+    so_id    INT NOT NULL, 
     gama_id  INT NOT NULL,
-    precio   DECIMAL(12,2) NOT NULL,
+    precio   DOUBLE NOT NULL,
     moneda   CHAR(3) NOT NULL DEFAULT 'COP',
     stock    INT NOT NULL DEFAULT 0,
 
@@ -92,7 +94,7 @@ CREATE TABLE detalle_ventas (
     venta_id        INT NOT NULL,
     celular_id      INT NOT NULL,
     cantidad        INT NOT NULL,
-    precio_unitario DECIMAL(12,2) NOT NULL,
+    precio_unitario DOUBLE(12,2) NOT NULL,
     moneda          CHAR(3) NOT NULL DEFAULT 'COP',
 
     CONSTRAINT fk_det_venta FOREIGN KEY (venta_id)
@@ -118,12 +120,12 @@ CREATE TABLE auditoria_celulares (
 
 CREATE TABLE historico_ventas_mensuales (
     id           INT AUTO_INCREMENT PRIMARY KEY,
-    anio         INT NOT NULL,
+    año          INT NOT NULL,
     mes          INT NOT NULL,
-    total_ventas DECIMAL(12,2) NOT NULL,
+    total_ventas DOUBLE(12,2) NOT NULL,
     num_ventas   INT NOT NULL,
     registrado   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uq_periodo (anio, mes)
+    UNIQUE KEY uq_periodo (año, mes)
 ) ENGINE=InnoDB;
 
 CREATE TABLE empleados_inactivos_log (
