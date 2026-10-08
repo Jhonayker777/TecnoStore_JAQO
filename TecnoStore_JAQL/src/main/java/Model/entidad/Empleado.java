@@ -5,11 +5,11 @@ import java.time.LocalDate;
 
 public class Empleado extends Persona {
 
-
     private Cargo cargo;
     private Precio salario;
     private Date fechaIngreso;
     private boolean activo;
+    private String contraseña;
 
     private Empleado(Builder b) {
         super(b.id, b.nombre, b.identificacion, b.correo, b.telefono);
@@ -17,6 +17,8 @@ public class Empleado extends Persona {
         this.salario = b.salario;
         this.fechaIngreso = b.fechaIngreso;
         this.activo = b.activo;
+        this.contraseña = b.contraseña;
+
     }
 
     @Override
@@ -56,6 +58,12 @@ public class Empleado extends Persona {
         return new Builder();
     }
 
+    public String getContraseña() {
+        return contraseña;
+    }
+    
+    
+    
     public Builder toBuilder() {
         return new Builder()
                 .id(this.getId())
@@ -66,7 +74,8 @@ public class Empleado extends Persona {
                 .cargo(this.cargo)
                 .salario(this.salario)
                 .fechaIngreso(this.fechaIngreso)
-                .activo(this.activo);
+                .activo(this.activo)
+                .contraseña(this.contraseña);
     }
 
     public static class Builder {
@@ -79,6 +88,7 @@ public class Empleado extends Persona {
         private Cargo cargo;
         private Precio salario;
         private Date fechaIngreso;
+        private String contraseña;
         private boolean activo = true;
 
         public Builder id(int id) {
@@ -128,6 +138,11 @@ public class Empleado extends Persona {
 
         public Empleado build() {
             return new Empleado(this);
+        }
+
+        public Builder contraseña(String c) {
+            this.contraseña = c;
+            return this;
         }
     }
 

@@ -79,11 +79,6 @@ BEGIN
         SET MESSAGE_TEXT = 'El salario debe ser mayor a cero';
     END IF;
 
-    IF NOT fn_moneda_valida(NEW.moneda) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Moneda inválida (3 letras mayúsculas)';
-    END IF;
-
     IF NEW.fecha_ingreso > CURDATE() THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'La fecha de ingreso no puede ser futura';

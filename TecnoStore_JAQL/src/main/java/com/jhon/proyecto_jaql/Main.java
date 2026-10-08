@@ -10,15 +10,19 @@ public class Main {
 
     public static void main(String[] args) {
         EmpleadoDao e = new EmpleadoDao();
-        e.crear(Empleado.builder()
+        Empleado em = Empleado.builder()
                 .nombre("Lau")
                 .identificacion("12365401")
                 .correo("Lau@tecnoStore.com")
                 .telefono("123456789")
                 .cargo(Cargo.GERENTE)
                 .salario(new Precio(1, "Vendedor", 123456))
-                .fechaIngreso(Date.valueOf("2026-12-06"))
-                .build());
+                .fechaIngreso(Date.valueOf("2025-12-06"))
+                .contraseña("1234567")
+                .build();
+        e.crear(em);
+
+        System.out.println(em.getId());
     }
 
 }
