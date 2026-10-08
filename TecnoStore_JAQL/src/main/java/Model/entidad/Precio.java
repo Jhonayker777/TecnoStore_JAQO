@@ -1,8 +1,6 @@
-package Model.Productos;
+package Model.entidad;
 
-import Model.*;
-
-class Precio {
+public class Precio {
 
     private long id;
     private String nombre;
