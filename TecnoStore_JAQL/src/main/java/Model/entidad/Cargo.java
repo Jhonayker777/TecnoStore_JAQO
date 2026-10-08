@@ -1,13 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model.entidad;
 
-/**
- *
- * @author jhon1
- */
-public class Cargo {
-    
-}
+public enum Cargo {
+        VENDEDOR("Vendedor"),
+        ADMIN("Admin"),
+        BODEGA("Bodega"),
+        GERENTE("Gerente");
+
+        private final String etiqueta;
+
+        Cargo(String etiqueta) {
+            this.etiqueta = etiqueta;
+        }
+
+        public String getEtiqueta() {
+            return etiqueta;
+        }
+
+        public static Cargo fromEtiqueta(String e) {
+            for (Cargo c : values()) {
+                if (c.etiqueta.equalsIgnoreCase(e)) {
+                    return c;
+                }
+            }
+            System.out.println("Cargo invalido");
+            return null;
+        }
+    }

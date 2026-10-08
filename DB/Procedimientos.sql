@@ -2,7 +2,7 @@
 USE TecnoStore_JAQO;
 
 
-DELIMITER $$
+DELIMITER ¬¬
 
 -- P1. Registrar venta simple
 CREATE PROCEDURE sp_registrar_venta(
@@ -11,7 +11,7 @@ CREATE PROCEDURE sp_registrar_venta(
     IN  p_celular_id  INT,
     IN  p_cantidad    INT,
     OUT p_venta_id    INT,
-    OUT p_total       DECIMAL(12,2)
+    OUT p_total       DOUBLE
 )
 BEGIN
     DECLARE v_stock  INT;
@@ -60,7 +60,7 @@ BEGIN
 
     SET p_total = fn_total_venta(p_venta_id);
     COMMIT;
-END$$
+END¬¬
 
 -- P2. Registrar venta múltiple con JSON
 CREATE PROCEDURE sp_registrar_venta_multiple(
@@ -68,7 +68,7 @@ CREATE PROCEDURE sp_registrar_venta_multiple(
     IN  p_empleado_id INT,
     IN  p_items_json  JSON,
     OUT p_venta_id    INT,
-    OUT p_total       DECIMAL(12,2)
+    OUT p_total       DOUBLE
 )
 BEGIN
     DECLARE v_idx      INT DEFAULT 0;
@@ -117,7 +117,7 @@ BEGIN
 
     SET p_total = fn_total_venta(p_venta_id);
     COMMIT;
-END$$
+END¬¬
 
 -- P3. Anular venta
 CREATE PROCEDURE sp_anular_venta(IN p_venta_id INT)
@@ -142,7 +142,7 @@ BEGIN
     DELETE FROM ventas WHERE id = p_venta_id;
 
     COMMIT;
-END$$
+END¬¬
 
 -- P4. Reponer stock
 CREATE PROCEDURE sp_reponer_stock(
@@ -161,7 +161,7 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'El celular no existe';
     END IF;
-END$$
+END¬¬
 
 -- P5. Actualizar precios por porcentaje
 CREATE PROCEDURE sp_actualizar_precios(
@@ -182,7 +182,7 @@ BEGIN
 
     SET v_count = ROW_COUNT();
     SELECT CONCAT(v_count, ' celulares actualizados') AS resultado;
-END$$
+END¬¬
 
 -- P6. Crear cliente (persona + cliente)
 CREATE PROCEDURE sp_crear_cliente(
@@ -209,7 +209,7 @@ BEGIN
     INSERT INTO clientes (persona_id) VALUES (p_persona_id);
 
     COMMIT;
-END$$
+END¬¬
 
 -- P7. Crear empleado (persona + empleado)
 CREATE PROCEDURE sp_crear_empleado(
@@ -218,8 +218,7 @@ CREATE PROCEDURE sp_crear_empleado(
     IN  p_correo         VARCHAR(120),
     IN  p_telefono       VARCHAR(20),
     IN  p_cargo          VARCHAR(20),
-    IN  p_salario        DECIMAL(12,2),
-    IN  p_moneda         CHAR(3),
+    IN  p_salario        DOUBLE,
     IN  p_fecha_ingreso  DATE,
     OUT p_persona_id     INT
 )
@@ -237,11 +236,11 @@ BEGIN
 
     SET p_persona_id = LAST_INSERT_ID();
 
-    INSERT INTO empleados (persona_id, cargo, salario, moneda, fecha_ingreso, activo)
-    VALUES (p_persona_id, p_cargo, p_salario, p_moneda, p_fecha_ingreso, TRUE);
+    INSERT INTO empleados (persona_id, cargo, salario,  fecha_ingreso, activo)
+    VALUES (p_persona_id, p_cargo, p_salario, p_fecha_ingreso, TRUE);
 
     COMMIT;
-END$$
+END¬¬
 
 -- P8. Reporte de ventas (devuelve filas)
 CREATE PROCEDURE sp_reporte_ventas()
@@ -263,6 +262,6 @@ BEGIN
     JOIN celulares ce     ON ce.id = d.celular_id
     JOIN marcas m         ON m.id = ce.marca_id
     ORDER BY v.fecha DESC, v.id DESC;
-END$$
+END¬¬
 
 DELIMITER ;

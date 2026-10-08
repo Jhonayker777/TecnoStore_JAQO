@@ -1,40 +1,15 @@
 package Model.entidad;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Empleado extends Persona {
 
-    public enum Cargo {
-        VENDEDOR("Vendedor"),
-        ADMIN("Admin"),
-        BODEGA("Bodega"),
-        GERENTE("Gerente");
 
-        private final String etiqueta;
-
-        Cargo(String etiqueta) {
-            this.etiqueta = etiqueta;
-        }
-
-        public String getEtiqueta() {
-            return etiqueta;
-        }
-
-        public static Cargo fromEtiqueta(String e) {
-            for (Cargo c : values()) {
-                if (c.etiqueta.equalsIgnoreCase(e)) {
-                    return c;
-                }
-            }
-            System.out.println("Cargo invalido");
-            return null;
-        }
-    }
-
-    private final Cargo cargo;
-    private  Precio salario;
-    private  LocalDate fechaIngreso;
-    private final boolean activo;
+    private Cargo cargo;
+    private Precio salario;
+    private Date fechaIngreso;
+    private boolean activo;
 
     private Empleado(Builder b) {
         super(b.id, b.nombre, b.identificacion, b.correo, b.telefono);
@@ -61,7 +36,7 @@ public class Empleado extends Persona {
         return salario;
     }
 
-    public LocalDate getFechaIngreso() {
+    public Date getFechaIngreso() {
         return fechaIngreso;
     }
 
@@ -103,7 +78,7 @@ public class Empleado extends Persona {
         private String telefono;
         private Cargo cargo;
         private Precio salario;
-        private LocalDate fechaIngreso;
+        private Date fechaIngreso;
         private boolean activo = true;
 
         public Builder id(int id) {
@@ -141,7 +116,7 @@ public class Empleado extends Persona {
             return this;
         }
 
-        public Builder fechaIngreso(LocalDate f) {
+        public Builder fechaIngreso(Date f) {
             this.fechaIngreso = f;
             return this;
         }
@@ -162,4 +137,3 @@ public class Empleado extends Persona {
                 + (activo ? "" : " [INACTIVO]");
     }
 }
-

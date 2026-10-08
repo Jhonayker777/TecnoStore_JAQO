@@ -35,10 +35,10 @@ public class Cliente extends Persona {
     }
 
     public Cliente agregarCompra(Venta v) {
-        return this.toBuilder().compras(appendCompra(v)).build();
+        return this.toBuilder().compras(nuevaCompra(v)).build();
     }
 
-    private List<Venta> appendCompra(Venta v) {
+    private List<Venta> nuevaCompra(Venta v) {
         List<Venta> nueva = new ArrayList<>(this.compras);
         if (v != null) {
             nueva.add(v);
