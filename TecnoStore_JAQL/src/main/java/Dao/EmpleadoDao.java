@@ -38,9 +38,9 @@ public class EmpleadoDao {
         }
 
     }
-    
-    public void activar(long id){
-        try(Connection con = c.conexion()) {
+
+    public void activar(long id) {
+        try (Connection con = c.conexion()) {
             String sql = "update empleados set activo=1 where id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, id);
@@ -50,8 +50,8 @@ public class EmpleadoDao {
         }
     }
 
-    public void desactivar(long id){
-        try(Connection con = c.conexion()) {
+    public void desactivar(long id) {
+        try (Connection con = c.conexion()) {
             String sql = "update empleados set activo=0 where id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, id);
@@ -60,18 +60,19 @@ public class EmpleadoDao {
             System.out.println("Error al desacactivar empleado: " + e.getMessage());
         }
     }
-    
-    public void actualizar(Empleado empleado) {
-        try (Connection con = c.conexion()) {
-            String sql = "update empleados set nombre=?, cargo=?, salario=?, activo=?, contraseña=? where id=?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, empleado.getNombre());
-            ps.setString(2, empleado.getCargo().getEtiqueta());
-            ps.setDouble(3, empleado.getSalario());
-            ps.setBoolean(4, empleado.getActivo());
-            ps.setString(5, empleado.getContraseña());
-            ps.setLong(6, empleado.getId());
 
+    public void actualizardatos(Empleado empleado, long id) {
+        try (Connection con = c.conexion()) {
+            CallableStatement ps = con.prepareCall("call sp_actualizar_empleado(?,?,?,?,?,?,?,?)");
+            ps.setLong(1, id);
+            ps.setString(2, empleado.getNombre());
+            ps.setString(3, empleado.getIdentificacion());
+            ps.setString(4, empleado.getCorreo());
+            ps.setString(5, empleado.getTelefono());
+            ps.setString(6, empleado.getCargo().getEtiqueta());
+            ps.setDouble(7, empleado.getSalario());
+            ps.setDate(8, empleado.getFechaIngreso());
+            ps.setString(9, empleado.getContraseña());
             ps.executeUpdate();
             System.out.println("Empleado actualizado correctamente! xD");
         } catch (Exception e) {
@@ -79,8 +80,6 @@ public class EmpleadoDao {
         }
     }
 
-   
-    
     public Empleado buscar(long id) {
         try (Connection con = c.conexion()) {
             Statement st = con.createStatement();
@@ -107,7 +106,7 @@ public class EmpleadoDao {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar empleado:"+ e.getMessage());
+            System.out.println("Error al buscar empleado:" + e.getMessage());
         }
         return null;
     }

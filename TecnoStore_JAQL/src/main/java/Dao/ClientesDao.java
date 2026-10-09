@@ -1,5 +1,6 @@
 package Dao;
 
+
 import Model.entidad.Cliente;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -12,7 +13,7 @@ public class ClientesDao {
         DB_SQL c = new DB_SQL();
 
         try (Connection con = c.conexion()) {
-            String sql = "call sp_crear_empleado(?,?,?,?,?)";
+            String sql = "call sp_crear_cliente(?,?,?,?,?)";
             CallableStatement ps = con.prepareCall(sql);
             ps.setString(1, cliente.getNombre());
             ps.setString(2, cliente.getIdentificacion());
@@ -25,9 +26,10 @@ public class ClientesDao {
 
             System.out.println("Cliente creado correctamente! xD");
         } catch (Exception e) {
-            System.out.println("Error al registrar empleado: " + e.getMessage());
-
+            System.out.println("Error al registrar cliente : " + e.getMessage());
         }
 
     }
+    
+    
 }

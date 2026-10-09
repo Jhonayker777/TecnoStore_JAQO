@@ -266,4 +266,63 @@ BEGIN
     ORDER BY v.fecha DESC, v.id DESC;
 END¬¬
 
+
+DELIMITER ¬¬
+
+CREATE PROCEDURE sp_actualizar_empleado(
+    IN p_persona_id      INT,
+    IN p_nombre          VARCHAR(100),
+    IN p_identificacion  VARCHAR(30),
+    IN p_correo          VARCHAR(120),
+    IN p_telefono        VARCHAR(20),
+    IN p_cargo           VARCHAR(20),
+    IN p_salario         DOUBLE,
+)
+BEGIN
+    DECLARE v_existe INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Verificar que el empleado existe
+    SELECT COUNT(*) INTO v_existe
+      FROM personas WHERE id = p_persona_id AND tipo = 'EMPLEADO';
+
+    IF v_existe = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El empleado no existe';
+    END IF;
+
+    -- Validar salario
+    IF p_salario <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El salario debe ser mayor a cero';
+    END IF;
+
+    -- Actualizar personas
+    UPDATE personas
+       SET nombre = p_nombre,
+           identificacion = p_identificacion,
+           correo = LOWER(p_correo),
+           telefono = p_telefono
+     WHERE id = p_persona_id;
+
+    -- Actualizar empleados
+    UPDATE empleados
+       SET cargo = p_cargo,
+           salario = p_salario,
+           moneda = UPPER(p_moneda),
+           fecha_ingreso = p_fecha_ingreso,
+           activo = p_activo
+     WHERE persona_id = p_persona_id;
+
+    COMMIT;
+END¬¬
+
+
 DELIMITER ;
