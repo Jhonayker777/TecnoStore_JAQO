@@ -61,4 +61,17 @@ public abstract class Persona {
     public void setTelefono(String telefono) {
         this.telefono = telefono.trim();
     }
+
+    @Override
+    public String toString() {
+        return """
+               Id: %s
+               Nombre: %S
+               Identificacion: %S
+               Correo: %s
+               Telefono: %s
+               """.formatted(id,nombre,identificacion,correo,telefono);
+    }
+    
+    
 }

@@ -1,12 +1,11 @@
 package Model.entidad;
 
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class Empleado extends Persona {
 
     private Cargo cargo;
-    private Precio salario;
+    private double salario;
     private Date fechaIngreso;
     private boolean activo;
     private String contraseña;
@@ -34,7 +33,7 @@ public class Empleado extends Persona {
         return cargo;
     }
 
-    public Precio getSalario() {
+    public double getSalario() {
         return salario;
     }
 
@@ -42,7 +41,7 @@ public class Empleado extends Persona {
         return fechaIngreso;
     }
 
-    public boolean isActivo() {
+    public boolean getActivo() {
         return activo;
     }
 
@@ -62,6 +61,12 @@ public class Empleado extends Persona {
         return contraseña;
     }
     
+    public String isActivo(){
+        if(activo == true){
+            return "activo";
+        }
+        return "inactivo";
+    }
     
     
     public Builder toBuilder() {
@@ -86,7 +91,7 @@ public class Empleado extends Persona {
         private String correo;
         private String telefono;
         private Cargo cargo;
-        private Precio salario;
+        private double salario;
         private Date fechaIngreso;
         private String contraseña;
         private boolean activo = true;
@@ -121,7 +126,7 @@ public class Empleado extends Persona {
             return this;
         }
 
-        public Builder salario(Precio s) {
+        public Builder salario(double s) {
             this.salario = s;
             return this;
         }
@@ -148,7 +153,11 @@ public class Empleado extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() + " | cargo: " + cargo + " | salario: " + salario
-                + (activo ? "" : " [INACTIVO]");
+        return super.toString() +"""
+                                 Cargo: %s
+                                 Salario: %S
+                                 Fecha_Ingreso: %S
+                                 Estado: %s
+                                 """.formatted(cargo.getEtiqueta(),salario,fechaIngreso,isActivo());
     }
 }

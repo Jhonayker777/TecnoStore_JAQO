@@ -20,7 +20,6 @@ public class Celular {
         this.stock = b.stock;
     }
 
-    // ---------- Reglas de negocio ----------
     public boolean hayStock(int cantidad) {
         return cantidad > 0 && stock >= cantidad;
     }

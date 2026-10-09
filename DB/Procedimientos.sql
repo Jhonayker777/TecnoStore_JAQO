@@ -190,6 +190,7 @@ CREATE PROCEDURE sp_crear_cliente(
     IN  p_identificacion VARCHAR(30),
     IN  p_correo         VARCHAR(120),
     IN  p_telefono       VARCHAR(20),
+    IN  p_contraseña     VARCHAR(20),
     OUT p_persona_id     INT
 )
 BEGIN
@@ -206,7 +207,7 @@ BEGIN
 
     SET p_persona_id = LAST_INSERT_ID();
 
-    INSERT INTO clientes (persona_id) VALUES (p_persona_id);
+    INSERT INTO clientes (persona_id, contraseña) VALUES (p_persona_id, p_contraseña);
 
     COMMIT;
 END¬¬

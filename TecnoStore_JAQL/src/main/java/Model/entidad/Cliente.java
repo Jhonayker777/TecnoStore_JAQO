@@ -10,6 +10,7 @@ public class Cliente extends Persona {
     private  LocalDateTime fechaRegistro;
     private List<Venta> compras;
     private String contraseña;
+    
 
     private Cliente(Builder b) {
         super(b.id, b.nombre, b.identificacion, b.correo, b.telefono);
@@ -32,6 +33,10 @@ public class Cliente extends Persona {
 
     public List<Venta> getCompras() {
         return compras;
+    }
+
+    public String getContraseña() {
+        return contraseña;
     }
 
     public Cliente agregarCompra(Venta v) {
