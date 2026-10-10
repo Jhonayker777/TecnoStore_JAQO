@@ -1,9 +1,14 @@
 package Dao;
 
 
+import Model.entidad.Cargo;
 import Model.entidad.Cliente;
+import Model.entidad.Empleado;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 
 public class ClientesDao {
@@ -31,5 +36,29 @@ public class ClientesDao {
 
     }
     
-    
+    public Cliente buscar(long id) {
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("""
+                                    SELECT p.id, p.nombre, p.identificacion,
+                                    p.correo, p.telefono, c.fecha_registro, c.contraseña
+                                    FROM clientes c INNER JOIN empleados e
+                                    ON c.persona_id = p.id WHERE p.tipo = 'CLIENTE';
+                                    """);
+            while (rs.next()) {
+                if (rs.getLong(1) == id) {
+                    return new Cliente.Builder()
+                            .id(rs.getInt(1))
+                            .nombre(rs.getString(2))
+                            .identificacion(rs.getString(3))
+                            .correo(rs.getString(4))
+                            .telefono(rs.getString(5))
+                            .build();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar empleado:" + e.getMessage());
+        }
+        return null;
+    }
 }

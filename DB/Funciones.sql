@@ -98,12 +98,33 @@ BEGIN
            AND p_nombre REGEXP '^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$';
 END¬¬
 
--- F10. Moneda válida
-CREATE FUNCTION fn_moneda_valida(p_moneda CHAR(3))
-RETURNS BOOLEAN
-DETERMINISTIC NO SQL
-BEGIN
-    RETURN p_moneda REGEXP '^[A-Z]{3}$';
-END¬¬
+-- F10. contraseña válida
+
+    CREATE FUNCTION fn_validar_contraseña(p_contraseña VARCHAR(20))
+    RETURNS BOOLEAN
+    DETERMINISTIC NO SQL
+    BEGIN
+        IF p_contraseña IS NULL OR p_contraseña = '' THEN
+            RETURN FALSE;
+        END IF;
+
+        IF CHAR_LENGTH(p_contraseña) < 6 THEN
+            RETURN FALSE;
+        END IF;
+
+        IF p_contraseña NOT REGEXP '[A-Z]' THEN
+            RETURN FALSE;
+        END IF;
+
+        IF p_contraseña NOT REGEXP '[a-z]' THEN
+            RETURN FALSE;
+        END IF;
+
+        IF p_contraseña NOT REGEXP '[0-9]' THEN
+            RETURN FALSE;
+        END IF;
+
+        RETURN TRUE;
+    END¬¬
 
 DELIMITER ;

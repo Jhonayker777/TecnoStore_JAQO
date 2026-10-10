@@ -37,10 +37,6 @@ public class Celular {
         return this.toBuilder().stock(this.stock + cantidad).build();
     }
 
-    public boolean esGamaAlta() {
-        return gama == CategoriaGama.ALTA;
-    }
-
     public int getId() {
         return id;
     }
@@ -133,6 +129,18 @@ public class Celular {
             this.modelo = modelo.trim();
             return new Celular(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return """
+               id: %s
+               Marca: %s
+               Modelo: %s
+               OS: %s
+               Precio: %s
+               Stock: %S
+               """.formatted((id), marca, modelo, sistemaOperativo, precio, stock);
     }
 
 }

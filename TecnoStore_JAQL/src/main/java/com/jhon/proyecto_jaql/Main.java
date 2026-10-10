@@ -22,8 +22,6 @@ public class Main {
                 .build();
         
         
-      Empleado emm =  e.buscar(15);
-        System.out.println(emm);
     }
 
 }

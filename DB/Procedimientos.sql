@@ -304,6 +304,8 @@ BEGIN
         SET MESSAGE_TEXT = 'El salario debe ser mayor a cero';
     END IF;
 
+    
+
     -- Actualizar personas
     UPDATE personas
        SET nombre = p_nombre,

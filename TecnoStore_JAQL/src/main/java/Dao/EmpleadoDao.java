@@ -61,10 +61,10 @@ public class EmpleadoDao {
         }
     }
 
-    public void actualizardatos(Empleado empleado, long id) {
+    public void actualizarDatos(Empleado empleado) {
         try (Connection con = c.conexion()) {
             CallableStatement ps = con.prepareCall("call sp_actualizar_empleado(?,?,?,?,?,?,?,?)");
-            ps.setLong(1, id);
+            ps.setLong(1, empleado.getId());
             ps.setString(2, empleado.getNombre());
             ps.setString(3, empleado.getIdentificacion());
             ps.setString(4, empleado.getCorreo());
