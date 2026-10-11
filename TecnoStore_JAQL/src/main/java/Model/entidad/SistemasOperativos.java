@@ -2,13 +2,13 @@ package Model.entidad;
 
 public class SistemasOperativos {
 
-    private int id;
+    private long id;
     private String nombre;
 
     public SistemasOperativos() {
     }
 
-    public SistemasOperativos(int id, String nombre) {
+    public SistemasOperativos(long id, String nombre) {
         this.id = id;
         setNombre(nombre);
     }
@@ -17,7 +17,7 @@ public class SistemasOperativos {
         setNombre(nombre);
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

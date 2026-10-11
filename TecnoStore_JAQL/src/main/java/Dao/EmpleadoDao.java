@@ -74,7 +74,7 @@ public class EmpleadoDao {
             ps.setDate(8, empleado.getFechaIngreso());
             ps.setString(9, empleado.getContraseña());
             ps.executeUpdate();
-            System.out.println("Empleado actualizado correctamente! xD");
+            System.out.println("Empleado actualizado correctamente!");
         } catch (Exception e) {
             System.out.println("Error en el ingreso de datos: " + e.getMessage());
         }

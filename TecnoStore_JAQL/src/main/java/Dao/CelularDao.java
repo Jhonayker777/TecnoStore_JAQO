@@ -16,7 +16,7 @@ public class CelularDao {
             CallableStatement cs = con.prepareCall(sql);
             cs.setLong(1, celular.getMarca().getId());
             cs.setString(2, celular.getModelo());
-            cs.setDouble(3, celular.getPrecio().getMonto());
+            cs.setDouble(3, celular.getPrecio().getId());
             cs.setLong(4, celular.getSistemaOperativo().getId());
             cs.setLong(5, celular.getGama().getId());
             cs.setDouble(6, celular.getStock());

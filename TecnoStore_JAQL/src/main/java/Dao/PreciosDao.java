@@ -57,7 +57,7 @@ public class PreciosDao {
 
     public void eliminar(long id) {
         try (Connection con = c.conexion()) {
-            if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el producto?", null, JOptionPane.YES_NO_OPTION) == 0) {
+            if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el precio?", null, JOptionPane.YES_NO_OPTION) == 0) {
                 if (buscar(id) != null) {
                     String sql = "delete from precios where id=?";
                     PreparedStatement ps = con.prepareStatement(sql);

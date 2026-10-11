@@ -147,69 +147,218 @@ CREATE TRIGGER trg_celular_before_insert
 BEFORE INSERT ON celulares
 FOR EACH ROW
 BEGIN
-    IF NEW.precio <= 0 THEN
+    IF NEW.marca_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El precio debe ser mayor a cero';
+        SET MESSAGE_TEXT = 'celulares.marca_id: obligatorio';
     END IF;
 
-    IF NEW.precio > 99999999 THEN
+    IF NOT EXISTS (SELECT 1 FROM marcas WHERE id = NEW.marca_id) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El precio excede el máximo permitido';
+        SET MESSAGE_TEXT = 'celulares.marca_id: la marca no existe';
+    END IF;
+
+    IF NEW.precio_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.precio_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM precios WHERE id = NEW.precio_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.precio_id: el precio no existe';
+    END IF;
+
+    IF NEW.so_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.so_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM sistemas_operativos WHERE id = NEW.so_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.so_id: el sistema operativo no existe';
+    END IF;
+
+    IF NEW.gama_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.gama_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM gamas WHERE id = NEW.gama_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.gama_id: la gama no existe';
+    END IF;
+
+    IF NEW.modelo IS NULL OR TRIM(NEW.modelo) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: obligatorio';
+    END IF;
+
+    SET NEW.modelo = TRIM(NEW.modelo);
+
+    IF CHAR_LENGTH(NEW.modelo) < 2 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: mínimo 2 caracteres';
+    END IF;
+
+    IF CHAR_LENGTH(NEW.modelo) > 80 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: máximo 80 caracteres';
+    END IF;
+
+    IF NEW.stock IS NULL THEN
+        SET NEW.stock = 0;
     END IF;
 
     IF NEW.stock < 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El stock no puede ser negativo';
+        SET MESSAGE_TEXT = 'celulares.stock: no puede ser negativo';
     END IF;
 
     IF NEW.stock > 100000 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El stock excede el máximo permitido';
+        SET MESSAGE_TEXT = 'celulares.stock: excede el máximo permitido';
     END IF;
 
-    IF NOT fn_moneda_valida(NEW.moneda) THEN
+
+    IF NEW.stock_minimo < 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Moneda inválida';
+        SET MESSAGE_TEXT = 'celulares.stock_minimo: no puede ser negativo';
     END IF;
 
-    IF CHAR_LENGTH(TRIM(NEW.modelo)) < 2 THEN
+
+    IF EXISTS (
+        SELECT 1 FROM celulares
+         WHERE marca_id = NEW.marca_id
+           AND LOWER(modelo) = LOWER(NEW.modelo)
+    ) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El modelo debe tener al menos 2 caracteres';
+        SET MESSAGE_TEXT = 'celulares: ya existe un celular con esa marca y modelo';
     END IF;
-
-    SET NEW.modelo = TRIM(NEW.modelo);
 END¬¬
 
--- T7. BEFORE UPDATE celulares
+
 DROP TRIGGER IF EXISTS trg_celular_before_update¬¬
 CREATE TRIGGER trg_celular_before_update
 BEFORE UPDATE ON celulares
 FOR EACH ROW
 BEGIN
-    IF NEW.precio <= 0 THEN
+    IF NEW.marca_id IS NULL THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El precio debe ser mayor a cero';
+        SET MESSAGE_TEXT = 'celulares.marca_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM marcas WHERE id = NEW.marca_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.marca_id: la marca no existe';
+    END IF;
+
+    IF NEW.precio_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.precio_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM precios WHERE id = NEW.precio_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.precio_id: el precio no existe';
+    END IF;
+
+    IF NEW.so_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.so_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM sistemas_operativos WHERE id = NEW.so_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.so_id: el sistema operativo no existe';
+    END IF;
+
+    IF NEW.gama_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.gama_id: obligatorio';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM gamas WHERE id = NEW.gama_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.gama_id: la gama no existe';
+    END IF;
+
+    IF NEW.modelo IS NULL OR TRIM(NEW.modelo) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: obligatorio';
+    END IF;
+
+    SET NEW.modelo = TRIM(NEW.modelo);
+
+    IF CHAR_LENGTH(NEW.modelo) < 2 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: mínimo 2 caracteres';
+    END IF;
+
+    IF CHAR_LENGTH(NEW.modelo) > 80 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: máximo 80 caracteres';
+    END IF;
+
+    IF NEW.modelo NOT REGEXP '^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ ._+-]+$' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.modelo: caracteres inválidos';
+    END IF;
+
+    IF NEW.stock IS NULL THEN
+        SET NEW.stock = 0;
     END IF;
 
     IF NEW.stock < 0 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El stock no puede ser negativo';
+        SET MESSAGE_TEXT = 'celulares.stock: no puede ser negativo';
     END IF;
 
-    IF NOT fn_moneda_valida(NEW.moneda) THEN
+    IF NEW.stock > 100000 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Moneda inválida';
+        SET MESSAGE_TEXT = 'celulares.stock: excede el máximo permitido';
     END IF;
 
-    IF OLD.precio <> NEW.precio THEN
+    IF NEW.stock_minimo < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.stock_minimo: no puede ser negativo';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM celulares
+         WHERE marca_id = NEW.marca_id
+           AND LOWER(modelo) = LOWER(NEW.modelo)
+           AND id <> OLD.id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares: ya existe otro celular con esa marca y modelo';
+    END IF;
+
+    -- ============================================
+    IF NEW.id <> OLD.id THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'celulares.id: no se puede modificar';
+    END IF;
+
+    IF OLD.precio_id <> NEW.precio_id THEN
         INSERT INTO auditoria_celulares
             (celular_id, campo, valor_antes, valor_despues, usuario_bd)
-        VALUES (OLD.id, 'precio',
-                CAST(OLD.precio AS CHAR),
-                CAST(NEW.precio AS CHAR),
-                USER());
+        VALUES
+            (OLD.id, 'precio_id',
+             CAST(OLD.precio_id AS CHAR),
+             CAST(NEW.precio_id AS CHAR),
+             USER());
+    END IF;
+
+    IF OLD.stock <> NEW.stock THEN
+        INSERT INTO auditoria_celulares
+            (celular_id, campo, valor_antes, valor_despues, usuario_bd)
+        VALUES
+            (OLD.id, 'stock',
+             CAST(OLD.stock AS CHAR),
+             CAST(NEW.stock AS CHAR),
+             USER());
     END IF;
 END¬¬
+
 
 -- T8. AFTER INSERT celulares
 DROP TRIGGER IF EXISTS trg_celular_after_insert¬¬
@@ -219,8 +368,7 @@ FOR EACH ROW
 BEGIN
     INSERT INTO auditoria_celulares
         (celular_id, campo, valor_antes, valor_despues, usuario_bd)
-    VALUES (NEW.id, 'creacion', NULL,
-            CONCAT('precio=', NEW.precio, ' stock=', NEW.stock), USER());
+    VALUES (NEW.id, 'creacion', NULL, CONCAT('precio=', NEW.precio, ' stock=', NEW.stock), USER());
 END¬¬
 
 -- T9. BEFORE DELETE celulares
