@@ -4,6 +4,7 @@ USE TecnoStore_JAQO;
 DELIMITER ¬¬
 
 -- T1. BEFORE INSERT personas
+DROP TRIGGER IF EXISTS trg_persona_before_insert¬¬
 CREATE TRIGGER trg_persona_before_insert
 BEFORE INSERT ON personas
 FOR EACH ROW
@@ -16,14 +17,14 @@ BEGIN
         SET MESSAGE_TEXT = 'Nombre inválido (mínimo 3 letras, sin números)';
     END IF;
 
-    IF NOT fn_identificacion_valida(NEW.identificacion) THEN
+    IF NOT fn_identificacion_valida(NEW.identificacion) THEN 
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Identificación inválida (6 a 15 dígitos)';
+        SET MESSAGE_TEXT = 'Identificacion ya existe o inválida';
     END IF;
 
     IF NOT fn_correo_valido(NEW.correo) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Correo con formato inválido';
+        SET MESSAGE_TEXT = 'Correo con formato invalido o ya existe';
     END IF;
 
     IF NOT fn_telefono_valido(NEW.telefono) THEN
@@ -33,6 +34,7 @@ BEGIN
 END¬¬
 
 -- T2. BEFORE UPDATE personas
+DROP TRIGGER IF EXISTS trg_persona_before_update¬¬
 CREATE TRIGGER trg_persona_before_update
 BEFORE UPDATE ON personas
 FOR EACH ROW
@@ -47,7 +49,7 @@ BEGIN
 
     IF NOT fn_identificacion_valida(NEW.identificacion) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Identificación inválida';
+        SET MESSAGE_TEXT = 'Identificación invalida o ya existe';
     END IF;
 
     IF NOT fn_correo_valido(NEW.correo) THEN
@@ -62,6 +64,7 @@ BEGIN
 END¬¬
 
 -- T3. BEFORE INSERT empleados
+DROP TRIGGER IF EXISTS trg_empleado_before_insert¬¬
 CREATE TRIGGER trg_empleado_before_insert
 BEFORE INSERT ON empleados
 FOR EACH ROW
@@ -89,7 +92,7 @@ BEGIN
         SET MESSAGE_TEXT = 'Fecha de ingreso fuera de rango';
     END IF;
     
-    IF NOT fn_contraseña_valida(NEW.contrasena) THEN
+    IF NOT fn_contraseña_valida(NEW.contraseña) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Contraseña inválida (mínimo 8 caracteres, al menos una letra y un número)';
     END IF;
@@ -97,6 +100,7 @@ BEGIN
 END¬¬
 
 -- T4. BEFORE UPDATE empleados
+DROP TRIGGER IF EXISTS trg_empleado_before_update¬¬
 CREATE TRIGGER trg_empleado_before_update
 BEFORE UPDATE ON empleados
 FOR EACH ROW
@@ -116,7 +120,7 @@ BEGIN
         SET MESSAGE_TEXT = 'ya se encuentra en el estado actual';
     END IF;
 
-    IF NOT fn_validar_contraseña(NEW.contrasena) THEN
+    IF NOT fn_validar_contraseña(NEW.contraseña) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Contraseña inválida (mínimo 8 caracteres, al menos una letra y un número)';
     END IF;
@@ -124,6 +128,7 @@ BEGIN
 END¬¬
 
 -- T5. BEFORE INSERT clientes
+DROP TRIGGER IF EXISTS trg_cliente_before_insert¬¬
 CREATE TRIGGER trg_cliente_before_insert
 BEFORE INSERT ON clientes
 FOR EACH ROW
@@ -137,6 +142,7 @@ BEGIN
 END¬¬
 
 -- T6. BEFORE INSERT celulares
+DROP TRIGGER IF EXISTS trg_celular_before_insert¬¬
 CREATE TRIGGER trg_celular_before_insert
 BEFORE INSERT ON celulares
 FOR EACH ROW
@@ -175,6 +181,7 @@ BEGIN
 END¬¬
 
 -- T7. BEFORE UPDATE celulares
+DROP TRIGGER IF EXISTS trg_celular_before_update¬¬
 CREATE TRIGGER trg_celular_before_update
 BEFORE UPDATE ON celulares
 FOR EACH ROW
@@ -205,6 +212,7 @@ BEGIN
 END¬¬
 
 -- T8. AFTER INSERT celulares
+DROP TRIGGER IF EXISTS trg_celular_after_insert¬¬
 CREATE TRIGGER trg_celular_after_insert
 AFTER INSERT ON celulares
 FOR EACH ROW
@@ -216,6 +224,7 @@ BEGIN
 END¬¬
 
 -- T9. BEFORE DELETE celulares
+DROP TRIGGER IF EXISTS trg_celular_before_delete¬¬
 CREATE TRIGGER trg_celular_before_delete
 BEFORE DELETE ON celulares
 FOR EACH ROW
@@ -231,6 +240,7 @@ BEGIN
 END¬¬
 
 -- T10. BEFORE DELETE empleados
+DROP TRIGGER IF EXISTS trg_empleado_before_delete¬¬
 CREATE TRIGGER trg_empleado_before_delete
 BEFORE DELETE ON empleados
 FOR EACH ROW
@@ -246,6 +256,7 @@ BEGIN
 END¬¬
 
 -- T11. BEFORE INSERT ventas
+DROP TRIGGER IF EXISTS trg_venta_before_insert¬¬
 CREATE TRIGGER trg_venta_before_insert
 BEFORE INSERT ON ventas
 FOR EACH ROW
@@ -277,6 +288,7 @@ BEGIN
 END¬¬
 
 -- T12. BEFORE INSERT detalle_ventas
+DROP TRIGGER IF EXISTS trg_detalle_before_insert¬¬
 CREATE TRIGGER trg_detalle_before_insert
 BEFORE INSERT ON detalle_ventas
 FOR EACH ROW
@@ -319,6 +331,7 @@ BEGIN
 END¬¬
 
 -- T13. AFTER INSERT detalle_ventas
+DROP TRIGGER IF EXISTS trg_detalle_after_insert¬¬
 CREATE TRIGGER trg_detalle_after_insert
 AFTER INSERT ON detalle_ventas
 FOR EACH ROW
@@ -337,6 +350,8 @@ BEGIN
 END¬¬
 
 -- T14. AFTER DELETE detalle_ventas
+
+DROP TRIGGER IF EXISTS trg_detalle_after_delete¬¬
 CREATE TRIGGER trg_detalle_after_delete
 AFTER DELETE ON detalle_ventas
 FOR EACH ROW
@@ -347,6 +362,7 @@ BEGIN
 END¬¬
 
 -- T15. BEFORE UPDATE detalle_ventas
+DROP TRIGGER IF EXISTS trg_detalle_before_update¬¬
 CREATE TRIGGER trg_detalle_before_update
 BEFORE UPDATE ON detalle_ventas
 FOR EACH ROW
@@ -368,6 +384,7 @@ BEGIN
 END¬¬
 
 -- T16. AFTER UPDATE detalle_ventas
+DROP TRIGGER IF EXISTS trg_detalle_after_update¬¬
 CREATE TRIGGER trg_detalle_after_update
 AFTER UPDATE ON detalle_ventas
 FOR EACH ROW
@@ -380,6 +397,7 @@ BEGIN
 END¬¬
 
 -- T17. BEFORE INSERT marcas
+DROP TRIGGER IF EXISTS trg_marca_before_insert¬¬
 CREATE TRIGGER trg_marca_before_insert
 BEFORE INSERT ON marcas
 FOR EACH ROW
@@ -392,6 +410,7 @@ BEGIN
 END¬¬
 
 -- T18. BEFORE INSERT sistemas_operativos
+DROP TRIGGER IF EXISTS trg_so_before_insert¬¬
 CREATE TRIGGER trg_so_before_insert
 BEFORE INSERT ON sistemas_operativos
 FOR EACH ROW
@@ -404,6 +423,7 @@ BEGIN
 END¬¬
 
 -- T19. BEFORE INSERT gamas
+DROP TRIGGER IF EXISTS trg_gama_before_insert¬¬
 CREATE TRIGGER trg_gama_before_insert
 BEFORE INSERT ON gamas
 FOR EACH ROW

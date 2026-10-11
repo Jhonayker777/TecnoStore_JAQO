@@ -1,5 +1,6 @@
 package Model.entidad;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public class Cliente extends Persona {
 
     private int UMBRAL_FRECUENTE = 3;
-    private  LocalDateTime fechaRegistro;
+    private Date fechaRegistro;
     private List<Venta> compras;
     private String contraseña;
     
@@ -16,6 +17,7 @@ public class Cliente extends Persona {
         super(b.id, b.nombre, b.identificacion, b.correo, b.telefono);
         this.fechaRegistro = b.fechaRegistro;
         this.compras = b.compras;
+        this.contraseña = b.contraseña;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class Cliente extends Persona {
         return compras.size() >= UMBRAL_FRECUENTE;
     }
 
-    public LocalDateTime getFechaRegistro() {
+    public Date getFechaRegistro() {
         return fechaRegistro;
     }
 
@@ -74,7 +76,7 @@ public class Cliente extends Persona {
         private String identificacion;
         private String correo;
         private String telefono;
-        private LocalDateTime fechaRegistro;
+        private Date fechaRegistro;
         private List<Venta> compras;
         private String contraseña;
 
@@ -103,7 +105,7 @@ public class Cliente extends Persona {
             return this;
         }
 
-        public Builder fechaRegistro(LocalDateTime f) {
+        public Builder fechaRegistro(Date f) {
             this.fechaRegistro = f;
             return this;
         }
@@ -116,11 +118,19 @@ public class Cliente extends Persona {
         public Cliente build() {
             return new Cliente(this);
         }
-        
-        public Builder contraseña(String t){
+
+        public Builder contraseña(String t) {
             this.contraseña = t;
             return this;
         }
     }
 
+    @Override
+    public String toString() {
+        return super.toString()+"""
+                                fecha_registro: %s
+                                """.formatted(fechaRegistro); 
+    }
+    
+    
 }

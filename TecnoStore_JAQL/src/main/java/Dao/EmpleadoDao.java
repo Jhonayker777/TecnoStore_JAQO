@@ -110,4 +110,24 @@ public class EmpleadoDao {
         }
         return null;
     }
+    
+    public boolean login(String correo, String contraseña) {
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("""
+                                           SELECT p.correo, e.contraseña FROM
+                                           empleados e INNER JOIN personas p
+                                           ON e.persona_id = p.id
+                                           WHERE p.tipo = 'EMPLEADO';
+                                        """);
+            while (rs.next()) {
+                if (rs.getString(1).equalsIgnoreCase(correo) && rs.getString(2).equals(contraseña)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error en el login Empleado"+ e);
+        }
+        return false;
+    }
 }

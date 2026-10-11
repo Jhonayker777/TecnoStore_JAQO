@@ -1,5 +1,7 @@
 package Control;
 
+import Dao.ClientesDao;
+import Dao.EmpleadoDao;
 import View.Login;
 import View.validaciones.Decimal;
 import View.validaciones.Entero;
@@ -16,9 +18,11 @@ public class LoginControl {
     private static final Entrada entrada = new Entrada(TEXTO, ENTERO, DECIMAL);
 
     Login login = new Login();
-
+    ClientesDao clienteDao = new ClientesDao();
+    EmpleadoDao empleadoDao = new EmpleadoDao();
 
     public void menu() {
+        login.Inicio();
         int op;
         do {
             op = login.general();
@@ -27,6 +31,8 @@ public class LoginControl {
                     Cliente();
                 case 2 ->
                     Empleado();
+                case 3 ->
+                    System.out.println("Saliendo es saliendo");
                 default ->
                     System.out.println("Opcion no encontrada");
             }
@@ -34,15 +40,24 @@ public class LoginControl {
     }
 
     private void Cliente() {
+
         String correo = login.correo();
+        String contraseña = login.contraseña();
+        if (clienteDao.login(correo, contraseña)) {
+            System.out.println("Secion iniciada correctamente");
+        } else {
+            System.out.println("Error al iniciar sesion");
+        }
     }
 
     private void Empleado() {
-
+        String correo = login.correo();
+        String contraseña = login.contraseña();
+        if (empleadoDao.login(correo, contraseña)) {
+            System.out.println("Secion iniciada correctamente");
+        } else {
+            System.out.println("Error al iniciar sesion");
+        }
     }
-    
-    
-    
-    
-    
+
 }

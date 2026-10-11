@@ -134,6 +134,15 @@ CREATE TABLE empleados_inactivos_log (
     detectado   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+CREATE TABLE precios (
+    id      BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre  VARCHAR(100) NOT NULL UNIQUE,
+    monto   DOUBLE NOT NULL,
+
+    CONSTRAINT chk_precio_monto CHECK (monto >= 0)
+) ENGINE=InnoDB;
+
+CREATE INDEX idx_precios_nombre ON precios(nombre);
 CREATE INDEX idx_personas_tipo   ON personas(tipo);
 CREATE INDEX idx_ventas_fecha    ON ventas(fecha);
 CREATE INDEX idx_ventas_cliente  ON ventas(cliente_id);

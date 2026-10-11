@@ -5,6 +5,7 @@ USE TecnoStore_JAQO;
 DELIMITER ¬¬
 
 -- P1. Registrar venta simple
+DROP PROCEDURE IF EXISTS sp_registrar_venta¬¬
 CREATE PROCEDURE sp_registrar_venta(
     IN  p_cliente_id  INT,
     IN  p_empleado_id INT,
@@ -63,6 +64,7 @@ BEGIN
 END¬¬
 
 -- P2. Registrar venta múltiple con JSON
+DROP PROCEDURE IF EXISTS sp_registrar_venta_multiple¬¬
 CREATE PROCEDURE sp_registrar_venta_multiple(
     IN  p_cliente_id  INT,
     IN  p_empleado_id INT,
@@ -120,6 +122,7 @@ BEGIN
 END¬¬
 
 -- P3. Anular venta
+DROP PROCEDURE IF EXISTS sp_anular_venta¬¬
 CREATE PROCEDURE sp_anular_venta(IN p_venta_id INT)
 BEGIN
     DECLARE v_existe INT;
@@ -145,6 +148,7 @@ BEGIN
 END¬¬
 
 -- P4. Reponer stock
+DROP PROCEDURE IF EXISTS sp_reponer_stock¬¬
 CREATE PROCEDURE sp_reponer_stock(
     IN p_celular_id INT,
     IN p_cantidad   INT
@@ -164,6 +168,7 @@ BEGIN
 END¬¬
 
 -- P5. Actualizar precios por porcentaje
+DROP PROCEDURE IF EXISTS sp_actualizar_precios¬¬
 CREATE PROCEDURE sp_actualizar_precios(
     IN p_marca_id   INT,
     IN p_porcentaje DECIMAL(5,2)
@@ -184,7 +189,172 @@ BEGIN
     SELECT CONCAT(v_count, ' celulares actualizados') AS resultado;
 END¬¬
 
+
+DROP PROCEDURE IF EXISTS sp_crear_celular¬¬
+CREATE PROCEDURE sp_crear_celular(
+    IN  p_marca_id     INT,
+    IN  p_modelo       VARCHAR(80),
+    IN  p_precio_id    BIGINT,
+    IN  p_so_id        INT,
+    IN  p_gama_id      INT,
+    IN  p_stock        INT,
+    IN  p_stock_minimo INT,
+    OUT p_celular_id   INT
+)
+BEGIN
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- 1. Validar marca
+    IF NOT EXISTS (SELECT 1 FROM marcas WHERE id = p_marca_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La marca no existe';
+    END IF;
+
+    -- 2. Validar precio
+    IF NOT EXISTS (SELECT 1 FROM precios WHERE id = p_precio_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El precio no existe';
+    END IF;
+
+    -- 3. Validar sistema operativo
+    IF NOT EXISTS (SELECT 1 FROM sistemas_operativos WHERE id = p_so_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El sistema operativo no existe';
+    END IF;
+
+    -- 4. Validar gama
+    IF NOT EXISTS (SELECT 1 FROM gamas WHERE id = p_gama_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La gama no existe';
+    END IF;
+
+    -- 5. Validar modelo
+    IF p_modelo IS NULL OR TRIM(p_modelo) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El modelo es obligatorio';
+    END IF;
+
+    IF CHAR_LENGTH(TRIM(p_modelo)) < 2 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El modelo debe tener al menos 2 caracteres';
+    END IF;
+
+    -- 6. Validar stock
+    IF p_stock IS NULL OR p_stock < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El stock no puede ser negativo';
+    END IF;
+
+    IF p_stock_minimo IS NULL OR p_stock_minimo < 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El stock mínimo no puede ser negativo';
+    END IF;
+
+    -- 7. Validar unicidad (marca + modelo)
+    IF EXISTS (
+        SELECT 1 FROM celulares
+         WHERE marca_id = p_marca_id
+           AND modelo = TRIM(p_modelo)
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ya existe un celular con esa marca y modelo';
+    END IF;
+
+    -- 8. Insertar
+    INSERT INTO celulares
+        (marca_id, modelo, precio_id, so_id, gama_id, stock, stock_minimo)
+    VALUES
+        (p_marca_id, TRIM(p_modelo), p_precio_id, p_so_id, p_gama_id,
+         p_stock, p_stock_minimo);
+
+    SET p_celular_id = LAST_INSERT_ID();
+
+    COMMIT;
+END¬¬
+
+DROP PROCEDURE IF EXISTS sp_actualizar_celular¬¬
+CREATE PROCEDURE sp_actualizar_celular(
+    IN p_id            INT,
+    IN p_marca_id      INT,
+    IN p_modelo        VARCHAR(80),
+    IN p_precio_id     BIGINT,
+    IN p_so_id         INT,
+    IN p_gama_id       INT,
+    IN p_stock         INT,
+    IN p_stock_minimo  INT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Validar existencia
+    IF NOT EXISTS (SELECT 1 FROM celulares WHERE id = p_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El celular no existe';
+    END IF;
+
+    -- Validar FK
+    IF NOT EXISTS (SELECT 1 FROM marcas WHERE id = p_marca_id) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La marca no existe';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM precios WHERE id = p_precio_id) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El precio no existe';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM sistemas_operativos WHERE id = p_so_id) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El SO no existe';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM gamas WHERE id = p_gama_id) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La gama no existe';
+    END IF;
+
+    -- Validar stock
+    IF p_stock < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El stock no puede ser negativo';
+    END IF;
+
+    -- Validar unicidad (excluyendo el mismo)
+    IF EXISTS (
+        SELECT 1 FROM celulares
+         WHERE marca_id = p_marca_id
+           AND modelo = TRIM(p_modelo)
+           AND id <> p_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ya existe otro celular con esa marca y modelo';
+    END IF;
+
+    -- Actualizar
+    UPDATE celulares
+       SET marca_id = p_marca_id,
+           modelo = TRIM(p_modelo),
+           precio_id = p_precio_id,
+           so_id = p_so_id,
+           gama_id = p_gama_id,
+           stock = p_stock,
+           stock_minimo = p_stock_minimo
+     WHERE id = p_id;
+
+    COMMIT;
+END¬¬
+
+
 -- P6. Crear cliente (persona + cliente)
+DROP PROCEDURE IF EXISTS sp_crear_cliente¬¬
 CREATE PROCEDURE sp_crear_cliente(
     IN  p_nombre         VARCHAR(100),
     IN  p_identificacion VARCHAR(30),
@@ -213,6 +383,7 @@ BEGIN
 END¬¬
 
 -- P7. Crear empleado (persona + empleado)
+DROP PROCEDURE IF EXISTS sp_crear_empleado¬¬
 CREATE PROCEDURE sp_crear_empleado(
     IN  p_nombre         VARCHAR(100),
     IN  p_identificacion VARCHAR(30),
@@ -245,6 +416,7 @@ BEGIN
 END¬¬
 
 -- P8. Reporte de ventas (devuelve filas)
+DROP PROCEDURE IF EXISTS sp_reporte_ventas¬¬
 CREATE PROCEDURE sp_reporte_ventas()
 BEGIN
     SELECT
@@ -266,9 +438,8 @@ BEGIN
     ORDER BY v.fecha DESC, v.id DESC;
 END¬¬
 
-
-DELIMITER ¬¬
-
+-- P9. Actualizar empleado (persona + empleado)
+DROP PROCEDURE IF EXISTS sp_actualizar_empleado¬¬
 CREATE PROCEDURE sp_actualizar_empleado(
     IN p_persona_id      INT,
     IN p_nombre          VARCHAR(100),
@@ -276,7 +447,7 @@ CREATE PROCEDURE sp_actualizar_empleado(
     IN p_correo          VARCHAR(120),
     IN p_telefono        VARCHAR(20),
     IN p_cargo           VARCHAR(20),
-    IN p_salario         DOUBLE,
+    IN p_salario         DOUBLE
 )
 BEGIN
     DECLARE v_existe INT;
@@ -317,14 +488,44 @@ BEGIN
     -- Actualizar empleados
     UPDATE empleados
        SET cargo = p_cargo,
-           salario = p_salario,
-           moneda = UPPER(p_moneda),
-           fecha_ingreso = p_fecha_ingreso,
-           activo = p_activo
+           salario = p_salario
      WHERE persona_id = p_persona_id;
 
     COMMIT;
 END¬¬
 
+
+DROP PROCEDURE IF EXISTS sp_eliminar_celular¬¬
+CREATE PROCEDURE sp_eliminar_celular(IN p_id INT)
+BEGIN
+    DECLARE v_ventas INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    -- Validar existencia
+    IF NOT EXISTS (SELECT 1 FROM celulares WHERE id = p_id) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El celular no existe';
+    END IF;
+
+    -- Validar que no tenga ventas
+    SELECT COUNT(*) INTO v_ventas
+      FROM detalle_ventas WHERE celular_id = p_id;
+
+    IF v_ventas > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No se puede eliminar: el celular tiene ventas asociadas';
+    END IF;
+
+    DELETE FROM celulares WHERE id = p_id;
+
+    COMMIT;
+END¬¬
 
 DELIMITER ;

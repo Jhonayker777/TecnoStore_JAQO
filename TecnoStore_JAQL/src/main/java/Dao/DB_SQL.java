@@ -9,7 +9,6 @@ public class DB_SQL {
         Connection c = null;
         try {
             c = DriverManager.getConnection("jdbc:mysql://localhost:3307/TecnoStore_JAQO", "root", "Incorrecta1.");
-            System.out.println("DB CONNECTED");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
