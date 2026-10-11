@@ -12,6 +12,11 @@ public class Precio {
         this.monto = monto;
     }
 
+    public Precio(String nombre, double monto) {
+        this.nombre = nombre;
+        this.monto = monto;
+    }
+
     public long getId() {
         return id;
     }
@@ -35,5 +40,16 @@ public class Precio {
     public void setMonto(double monto) {
         this.monto = monto;
     }
+
+    @Override
+    public String toString() {
+        return """
+               id: %s
+               Nombre: %s
+               Monto: %s
+               """.formatted(id, nombre, monto) ;
+    }
+    
+    
 
 }

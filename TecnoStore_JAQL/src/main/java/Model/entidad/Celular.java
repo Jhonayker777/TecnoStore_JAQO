@@ -2,13 +2,14 @@ package Model.entidad;
 
 public class Celular {
 
-    private final int id;
-    private final Marca marca;
-    private final String modelo;
-    private final SistemasOperativos sistemaOperativo;
-    private final CategoriaGama gama;
-    private final Precio precio;
-    private final int stock;
+    private long id;
+    private Marca marca;
+    private String modelo;
+    private SistemasOperativos sistemaOperativo;
+    private CategoriaGama gama;
+    private Precio precio;
+    private int stock;
+    private int stock_minimo;
 
     private Celular(Builder b) {
         this.id = b.id;
@@ -18,6 +19,7 @@ public class Celular {
         this.gama = b.gama;
         this.precio = b.precio;
         this.stock = b.stock;
+        this.stock_minimo =b.stock_minimo;
     }
 
     public boolean hayStock(int cantidad) {
@@ -37,8 +39,16 @@ public class Celular {
         return this.toBuilder().stock(this.stock + cantidad).build();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getStock_minimo() {
+        return stock_minimo;
     }
 
     public Marca getMarca() {
@@ -77,20 +87,22 @@ public class Celular {
                 .sistemaOperativo(this.sistemaOperativo)
                 .gama(this.gama)
                 .precio(this.precio)
-                .stock(this.stock);
+                .stock(this.stock)
+                .stock_minimo(this.stock_minimo);
     }
 
     public static class Builder {
 
-        private int id;
+        private long id;
         private Marca marca;
         private String modelo;
         private SistemasOperativos sistemaOperativo;
         private CategoriaGama gama;
         private Precio precio;
         private int stock;
+        private int stock_minimo;
 
-        public Builder id(int id) {
+        public Builder id(long id) {
             this.id = id;
             return this;
         }
@@ -122,6 +134,11 @@ public class Celular {
 
         public Builder stock(int stock) {
             this.stock = stock;
+            return this;
+        }
+        
+        public Builder stock_minimo(int stock_minimo) {
+            this.stock_minimo = stock_minimo;
             return this;
         }
 

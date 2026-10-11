@@ -1,15 +1,22 @@
 package Model.entidad;
 
 public enum CategoriaGama {
-    ALTA("Alta"),
-    MEDIA("Media"),
-    BAJA("Baja");
+    ALTA(1,"Alta"),
+    MEDIA(2,"Media"),
+    BAJA(3,"Baja");
 
     private String etiqueta;
+    private long id;
 
-    CategoriaGama(String etiqueta) {
+    CategoriaGama(long id, String etiqueta) {
         this.etiqueta = etiqueta;
+        this.id = id;
     }
+
+    public long getId() {
+        return id;
+    }
+
     
     public String getEtiqueta() {
         return etiqueta;
@@ -21,4 +28,6 @@ public enum CategoriaGama {
         }
         return null;
     }
+    
+    
 }
