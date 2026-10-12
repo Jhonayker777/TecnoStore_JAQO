@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
-public class SitemasOperativosDao {
+public class SistemasOperativosDao {
 
     DB_SQL c = new DB_SQL();
 

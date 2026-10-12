@@ -6,7 +6,7 @@ import View.validaciones.Entrada;
 import View.validaciones.Texto;
 import java.util.Scanner;
 
-public class Login {
+public class VistaLogin {
 
     private static final Scanner SCANNER = new Scanner(System.in);
 
@@ -24,19 +24,19 @@ public class Login {
                            """);
     }
 
-     public int general() {
+    public int general() {
         return entrada.entero("""
                               1- Cliente.
                               2- Empleado.
                               3- Salir.
                               """);
     }
-    
+
     public String correo() {
         return entrada.texto("Ingrese su correo:");
     }
-    
-    public String contraseña(){
+
+    public String contraseña() {
         return entrada.texto("Ingrese su contraseña:");
     }
 

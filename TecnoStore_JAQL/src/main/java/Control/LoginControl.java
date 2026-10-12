@@ -2,22 +2,11 @@ package Control;
 
 import Dao.ClientesDao;
 import Dao.EmpleadoDao;
-import View.Login;
-import View.validaciones.Decimal;
-import View.validaciones.Entero;
-import View.validaciones.Entrada;
-import View.validaciones.Texto;
-import java.util.Scanner;
+import View.VistaLogin;
 
 public class LoginControl {
 
-    private static final Scanner SCANNER = new Scanner(System.in);
-    private static final Texto TEXTO = new Texto(SCANNER);
-    private static final Entero ENTERO = new Entero(SCANNER);
-    private static final Decimal DECIMAL = new Decimal(SCANNER);
-    private static final Entrada entrada = new Entrada(TEXTO, ENTERO, DECIMAL);
-
-    Login login = new Login();
+    VistaLogin login = new VistaLogin();
     ClientesDao clienteDao = new ClientesDao();
     EmpleadoDao empleadoDao = new EmpleadoDao();
 
@@ -43,6 +32,7 @@ public class LoginControl {
 
         String correo = login.correo();
         String contraseña = login.contraseña();
+        
         if (clienteDao.login(correo, contraseña)) {
             System.out.println("Secion iniciada correctamente");
         } else {
@@ -53,6 +43,7 @@ public class LoginControl {
     private void Empleado() {
         String correo = login.correo();
         String contraseña = login.contraseña();
+        
         if (empleadoDao.login(correo, contraseña)) {
             System.out.println("Secion iniciada correctamente");
         } else {
