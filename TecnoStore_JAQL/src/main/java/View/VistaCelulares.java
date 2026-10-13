@@ -1,13 +1,10 @@
 package View;
 
-import Control.MarcaControl;
-import Control.PrecioControl;
-import Control.SistemaOperativoControl;
-import Dao.MarcaDao;
-import Dao.PreciosDao;
-import Dao.SistemasOperativosDao;
 import Model.CategoriaGama;
 import Model.Celular;
+import Model.Marca;
+import Model.Precio;
+import Model.SistemasOperativos;
 import View.validaciones.Decimal;
 import View.validaciones.Entero;
 import View.validaciones.Entrada;
@@ -18,16 +15,15 @@ import java.util.Scanner;
 public class VistaCelulares {
 
     private static final Scanner SCANNER = new Scanner(System.in);
-
     private static final Texto TEXTO = new Texto(SCANNER);
     private static final Entero ENTERO = new Entero(SCANNER);
     private static final Decimal DECIMAL = new Decimal(SCANNER);
-
     private static final Entrada entrada = new Entrada(TEXTO, ENTERO, DECIMAL);
-    
-    MarcaControl marcaControl = new MarcaControl();
-    SistemaOperativoControl soControl = new SistemaOperativoControl();
-    PrecioControl precioControl = new PrecioControl();
+
+    private VistaMarca vistaMarca = new VistaMarca();
+    private VistaPrecio vistaPrecio = new VistaPrecio();
+    private VistaSistemaOperativo vistaSO = new VistaSistemaOperativo();
+    private VistaCategoriaGama vistaGama = new VistaCategoriaGama();
 
     public int principal() {
 
@@ -42,31 +38,89 @@ public class VistaCelulares {
     }
 
     public void mostrar(List<Celular> lista) {
-        for (Celular celular : lista) {
-            System.out.println(celular);
+        System.out.println("------------------Celulares----------------------");
+        lista.forEach(System.out::println);
+        System.out.println("-------------------------------------------------");
+    }
+
+    public void FiltrarNombre(List<Celular> lista) {
+        String nombre = entrada.texto("Ingrese el nombre a buscar");
+        List<Celular> list = lista.stream()
+                .filter(c -> c.getModelo()
+                .toLowerCase()
+                .contains(nombre.toLowerCase().trim()))
+                .toList();
+        if (!list.isEmpty()) {
+            mostrar(list);
+        } else {
+            System.out.println("No se encontraron coincidencias por: " + nombre);
+        }
+    }
+
+    public void filtrarGama(List<Celular> lista) {
+        CategoriaGama gama = vistaGama.escogergama();
+        List<Celular> list = lista.stream()
+                .filter(c -> c.getGama().getId() == gama.getId())
+                .toList();
+        if (!list.isEmpty()) {
+            mostrar(list);
+        } else {
+            System.out.println("No se encontraron coincidencias por gama: " + gama.getEtiqueta());
+        }
+    }
+
+    public void filtrarMarca(List<Celular> lista) {
+        Marca marca = vistaMarca.escogerMarca();
+        List<Celular> list = lista.stream()
+                .filter(c -> c.getMarca().getId() == marca.getId())
+                .toList();
+        if (!list.isEmpty()) {
+            mostrar(list);
+        } else {
+            System.out.println("No se encontraron coincidencias por: " + marca.getNombre());
         }
     }
 
     public Celular ingresarDatos() {
+        Marca marquiña = vistaMarca.escogerMarca();
+        Precio p = vistaPrecio.escogerPrecio();
+        SistemasOperativos so = vistaSO.escogerSistemaOperativo();
+        CategoriaGama gama = vistaGama.escogergama();
+
+        if (marquiña == null || p == null || so == null) {
+            System.out.println("No se pudo registrar el Celular");
+            return null;
+        }
+
         return Celular.builder()
-                .marca(marcaControl.escogerMarca())
+                .marca(marquiña)
                 .modelo(entrada.texto("Ingrese el modelo"))
-                .sistemaOperativo(soControl.escogerSistemaOperativo())
-                .gama(CategoriaGama.fromEtiqueta(entrada.texto("Escoja la gama : ALTA, MEDIA, BAJA")))
-                .precio(precioControl.escogerPrecio())
+                .sistemaOperativo(so)
+                .gama(gama)
+                .precio(p)
                 .stock(entrada.entero("Ingrese el stock"))
                 .stock_minimo(entrada.entero("Ingrese el stock minimo"))
                 .build();
     }
-    
+
     public Celular actualizarDatos(long id) {
+        Marca marquiña = vistaMarca.escogerMarca();
+        Precio p = vistaPrecio.escogerPrecio();
+        SistemasOperativos so = vistaSO.escogerSistemaOperativo();
+        CategoriaGama gama = vistaGama.escogergama();
+
+        if (marquiña == null || p == null || so == null) {
+            System.out.println("No se pudo registrar el Celular");
+            return null;
+        }
+
         return Celular.builder()
                 .id(id)
-                .marca(marcaControl.escogerMarca())
+                .marca(marquiña)
                 .modelo(entrada.texto("Ingrese el modelo"))
-                .sistemaOperativo(soControl.escogerSistemaOperativo())
-                .gama(CategoriaGama.fromEtiqueta(entrada.texto("Escoja la gama : ALTA, MEDIA, BAJA")))
-                .precio(precioControl.escogerPrecio())
+                .sistemaOperativo(so)
+                .gama(gama)
+                .precio(p)
                 .stock(entrada.entero("Ingrese el stock"))
                 .stock_minimo(entrada.entero("Ingrese el stock minimo"))
                 .build();

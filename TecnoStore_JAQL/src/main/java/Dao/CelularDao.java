@@ -36,7 +36,7 @@ public class CelularDao {
             cs.execute();
             celular.setId(cs.getInt(8));
 
-            System.out.println("Empleado creado correctamente! xD");
+            System.out.println("Celular creado correctamente! xD");
         } catch (Exception e) {
             System.out.println("Error al registrar celular: " + e.getMessage());
 
@@ -106,6 +106,7 @@ public class CelularDao {
                         .stock_minimo(rs.getInt(8))
                         .build());
             }
+            return lista;
         } catch (SQLException e) {
             System.out.println("Error al listar celulares " + e);
         }
@@ -114,13 +115,13 @@ public class CelularDao {
 
     public void eliminar(long id) {
         try (Connection con = c.conexion()) {
-            if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el sistema operativo?", null, JOptionPane.YES_NO_OPTION) == 0) {
+            if (JOptionPane.showConfirmDialog(null, "¿Desea eliminar el Celular?", null, JOptionPane.YES_NO_OPTION) == 0) {
                 if (buscar(id) != null) {
-                    String sql = "delete from sistemas_operativos where id=?";
+                    String sql = "delete from celulares where id=?";
                     PreparedStatement ps = con.prepareStatement(sql);
                     ps.setLong(1, id);
                     ps.executeUpdate();
-                    System.out.println("Producto eliminado correctamente! xD");
+                    System.out.println("Celular eliminado correctamente! xD");
                 } else {
                     System.out.println("Operacion cancelada, el id no existe");
                 }

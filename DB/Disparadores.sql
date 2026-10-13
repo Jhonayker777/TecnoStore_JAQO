@@ -24,7 +24,7 @@ BEGIN
 
     IF NOT fn_correo_valido(NEW.correo) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Correo con formato invalido o ya existe';
+        SET MESSAGE_TEXT = 'Correo con formato invalido';
     END IF;
 
     IF NOT fn_telefono_valido(NEW.telefono) THEN

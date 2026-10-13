@@ -1,7 +1,6 @@
 package Model;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class Cliente extends Persona {
 
     public static class Builder {
 
-        private int id;
+        private long id;
         private String nombre;
         private String identificacion;
         private String correo;
@@ -80,7 +79,7 @@ public class Cliente extends Persona {
         private List<Venta> compras;
         private String contraseña;
 
-        public Builder id(int id) {
+        public Builder id(long id) {
             this.id = id;
             return this;
         }

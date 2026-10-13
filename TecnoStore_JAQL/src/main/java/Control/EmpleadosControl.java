@@ -1,15 +1,13 @@
 package Control;
 
-import Dao.CelularDao;
-import Model.Celular;
+import Dao.ClientesDao;
 import Model.Empleado;
-import View.VistaCelulares;
 import View.VistaEmpleados;
-import java.util.List;
 
 public class EmpleadosControl {
 
-    VistaCelulares celularvew = new VistaCelulares();
+    ClienteControl celientControl = new ClienteControl();
+    CelularesControl celular = new CelularesControl();
     VistaEmpleados vista = new VistaEmpleados();
     private Empleado sesion;
 
@@ -23,13 +21,13 @@ public class EmpleadosControl {
             op = vista.gerente();
             switch (op) {
                 case 1 -> {
-                    catalogo();
+                    celular.catalogo();
                 }
                 case 2 -> {
-                    System.out.println("Gestion de celulares");
+                    celular.administrador();
                 }
                 case 3 -> {
-                    System.out.println("Gestion de clientes");
+                    celientControl.administrar();
                 }
                 case 4 -> {
                     System.out.println("Registrar venta");
@@ -62,13 +60,13 @@ public class EmpleadosControl {
             op = vista.administrador();
             switch (op) {
                 case 1 -> {
-                    catalogo();
+                    celular.catalogo();
                 }
                 case 2 -> {
-                    System.out.println("Gestion de celulares");
+                    celular.administrador();
                 }
                 case 3 -> {
-                    System.out.println("Gestion de clientes");
+                    celientControl.administrar();
                 }
                 case 4 -> {
                     System.out.println("Registrar venta");
@@ -98,7 +96,7 @@ public class EmpleadosControl {
             op = vista.vendedor();
             switch (op) {
                 case 1 -> {
-                    catalogo();
+                    celular.catalogo();
                 }
                 case 2 -> {
                     System.out.println("Registrar venta");
@@ -122,10 +120,10 @@ public class EmpleadosControl {
             op = vista.bodega();
             switch (op) {
                 case 1 -> {
-                    catalogo();
+                    celular.catalogo();
                 }
                 case 2 -> {
-                    System.out.println("Gestion de celulares");
+                    celular.administrador();
                 }
                 case 0 -> {
                     System.out.println("Cerrando sesion...");
@@ -136,16 +134,5 @@ public class EmpleadosControl {
             }
         } while (op != 0);
     }
-
-    public void catalogo() {
-        List<Celular> lista = new CelularDao().listar();
-        if (lista != null) {
-            celularvew.mostrar(lista);
-        } else {
-            System.out.println("No hay celulares disponibles");
-        }
-    }
-    
-    
 
 }

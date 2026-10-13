@@ -33,4 +33,12 @@ public class SistemasOperativos {
         this.nombre = nombre.trim();
     }
 
+    @Override
+    public String toString() {
+        return """
+               Id: %s
+               Nombre: %s
+               """.formatted(id,nombre);
+    }
+
 }

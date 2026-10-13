@@ -151,13 +151,15 @@ public class Celular {
     @Override
     public String toString() {
         return """
+               
                id: %s
                Marca: %s
                Modelo: %s
                OS: %s
+               Gama: %s
                Precio: %s
                Stock: %S
-               """.formatted((id), marca, modelo, sistemaOperativo, precio, stock);
+               """.formatted(id, marca.getNombre(), modelo, sistemaOperativo.getNombre(),gama.getEtiqueta(), precio.getMonto(), stock);
     }
 
 }
