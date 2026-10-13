@@ -1,10 +1,15 @@
 package Control;
 
+import Dao.CelularDao;
+import Model.Celular;
 import Model.Empleado;
+import View.VistaCelulares;
 import View.VistaEmpleados;
+import java.util.List;
 
 public class EmpleadosControl {
 
+    VistaCelulares celularvew = new VistaCelulares();
     VistaEmpleados vista = new VistaEmpleados();
     private Empleado sesion;
 
@@ -18,7 +23,7 @@ public class EmpleadosControl {
             op = vista.gerente();
             switch (op) {
                 case 1 -> {
-                    System.out.println("Ver catalogo");
+                    catalogo();
                 }
                 case 2 -> {
                     System.out.println("Gestion de celulares");
@@ -57,7 +62,7 @@ public class EmpleadosControl {
             op = vista.administrador();
             switch (op) {
                 case 1 -> {
-                    System.out.println("Ver catalogo");
+                    catalogo();
                 }
                 case 2 -> {
                     System.out.println("Gestion de celulares");
@@ -93,7 +98,7 @@ public class EmpleadosControl {
             op = vista.vendedor();
             switch (op) {
                 case 1 -> {
-                    System.out.println("Ver catalogo");
+                    catalogo();
                 }
                 case 2 -> {
                     System.out.println("Registrar venta");
@@ -110,14 +115,14 @@ public class EmpleadosControl {
             }
         } while (op != 0);
     }
-    
+
     public void bodega() {
         int op;
         do {
             op = vista.bodega();
             switch (op) {
                 case 1 -> {
-                    System.out.println("Ver catalogo");
+                    catalogo();
                 }
                 case 2 -> {
                     System.out.println("Gestion de celulares");
@@ -131,5 +136,16 @@ public class EmpleadosControl {
             }
         } while (op != 0);
     }
+
+    public void catalogo() {
+        List<Celular> lista = new CelularDao().listar();
+        if (lista != null) {
+            celularvew.mostrar(lista);
+        } else {
+            System.out.println("No hay celulares disponibles");
+        }
+    }
+    
+    
 
 }

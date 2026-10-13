@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class MarcaDao {
@@ -37,6 +39,21 @@ public class MarcaDao {
             System.out.println("Se encontro el sistema operativo");
         } catch (SQLException e) {
             System.out.println("Error al buscar el sistema operativo : " + e);
+        }
+        return null;
+    }
+
+    public List<Marca> listar() {
+        try (Connection con = c.conexion()) {
+            List<Marca> lista = new ArrayList<>();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from marcas");
+            while (rs.next()) {
+                lista.add(new Marca(rs.getLong(1), rs.getString(2)));
+            }
+            return lista;
+        } catch (SQLException e) {
+            System.out.println("Error al listar marcas " + e);
         }
         return null;
     }
@@ -73,4 +90,5 @@ public class MarcaDao {
             System.out.println("Error en la eliminacion de precios: " + e.getMessage());
         }
     }
+
 }

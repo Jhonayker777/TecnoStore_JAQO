@@ -51,8 +51,26 @@ public class LoginControl {
         Empleado sesion = empleadoDao.login(correo, contraseña);
 
         if (sesion != null) {
-            
+            String cargo = sesion.getCargo().getEtiqueta();
             EmpleadosControl empleado = new EmpleadosControl(sesion);
+
+            switch (cargo) {
+                case "Vendedor" -> {
+                    empleado.vededor();
+                }
+                case "Admin" -> {
+                    empleado.administrador();
+                }
+                case "Bodega" -> {
+                    empleado.bodega();
+                }
+                case "Gerente" -> {
+                    empleado.gerente();
+                }
+                default ->
+                    System.out.println("Cargo no encontrado");
+            }
+            
         } else {
             System.out.println("Error al iniciar sesion");
         }

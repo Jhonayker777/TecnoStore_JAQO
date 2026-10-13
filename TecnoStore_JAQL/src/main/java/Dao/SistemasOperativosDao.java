@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class SistemasOperativosDao {
@@ -33,6 +35,22 @@ public class SistemasOperativosDao {
                     SistemasOperativos so = new SistemasOperativos(rs.getLong(1), rs.getString(2));
                     return so;
                 }
+            }
+            System.out.println("Se encontro el sistema operativo");
+        } catch (SQLException e) {
+            System.out.println("Error al buscar el sistema operativo : " + e);
+        }
+        return null;
+    }
+
+    public List<SistemasOperativos> listar() {
+        List<SistemasOperativos> lista = new ArrayList<>();
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from sistemas_operativos");
+            while (rs.next()) {
+                    lista.add(new SistemasOperativos(rs.getLong(1), rs.getString(2)));
+                    return lista;
             }
             System.out.println("Se encontro el sistema operativo");
         } catch (SQLException e) {

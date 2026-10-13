@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class CelularDao {
@@ -81,6 +83,31 @@ public class CelularDao {
             System.out.println("Se encontro el sistema operativo");
         } catch (SQLException e) {
             System.out.println("Error al buscar el sistema operativo : " + e);
+        }
+        return null;
+    }
+
+    public List<Celular> listar() {
+
+        List<Celular> lista = new ArrayList<>();
+
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from celulares");
+            while (rs.next()) {
+                lista.add(new Celular.Builder()
+                        .id(rs.getLong(1))
+                        .marca(marca.buscar(rs.getLong(2)))
+                        .modelo(rs.getString(3))
+                        .sistemaOperativo(so.buscar(rs.getLong(5)))
+                        .gama(CategoriaGama.fromId(rs.getLong(6)))
+                        .precio(precio.buscar(rs.getLong(4)))
+                        .stock(rs.getInt(7))
+                        .stock_minimo(rs.getInt(8))
+                        .build());
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar celulares " + e);
         }
         return null;
     }
