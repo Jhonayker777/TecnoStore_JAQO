@@ -1,7 +1,7 @@
 package Dao;
 
-import Model.entidad.CategoriaGama;
-import Model.entidad.Celular;
+import Model.CategoriaGama;
+import Model.Celular;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

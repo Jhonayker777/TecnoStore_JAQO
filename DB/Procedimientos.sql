@@ -189,7 +189,7 @@ BEGIN
     SELECT CONCAT(v_count, ' celulares actualizados') AS resultado;
 END¬¬
 
-
+-- P6. Crear celular
 DROP PROCEDURE IF EXISTS sp_crear_celular¬¬
 CREATE PROCEDURE sp_crear_celular(
     IN  p_marca_id     INT,
@@ -279,6 +279,7 @@ BEGIN
     COMMIT;
 END¬¬
 
+-- P7. Actualizar celular
 DROP PROCEDURE IF EXISTS sp_actualizar_celular¬¬
 CREATE PROCEDURE sp_actualizar_celular(
     IN p_id            INT,
@@ -381,6 +382,104 @@ BEGIN
 
     COMMIT;
 END¬¬
+
+DROP PROCEDURE IF EXISTS sp_actualizar_cliente¬¬
+CREATE PROCEDURE sp_actualizar_cliente(
+    IN p_persona_id     INT,
+    IN p_nombre         VARCHAR(100),
+    IN p_identificacion VARCHAR(30),
+    IN p_correo         VARCHAR(120),
+    IN p_telefono       VARCHAR(20)
+)
+BEGIN
+    DECLARE v_existe INT DEFAULT 0;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    SELECT COUNT(*) INTO v_existe
+      FROM personas
+     WHERE id = p_persona_id AND tipo = 'CLIENTE';
+
+    IF v_existe = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El cliente no existe';
+    END IF;
+
+    IF p_nombre IS NULL OR TRIM(p_nombre) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El nombre es obligatorio';
+    END IF;
+
+    IF CHAR_LENGTH(TRIM(p_nombre)) < 3 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El nombre debe tener al menos 3 caracteres';
+    END IF;
+
+    IF CHAR_LENGTH(TRIM(p_nombre)) > 100 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El nombre no puede superar 100 caracteres';
+    END IF;
+
+    IF TRIM(p_nombre) NOT REGEXP '^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El nombre solo admite letras y espacios';
+    END IF;
+
+    IF p_identificacion IS NULL OR TRIM(p_identificacion) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La identificación es obligatoria';
+    END IF;
+
+    IF TRIM(p_identificacion) NOT REGEXP '^[0-9]{6,15}$' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La identificación debe tener entre 6 y 15 dígitos';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM personas
+         WHERE identificacion = TRIM(p_identificacion)
+           AND id <> p_persona_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La identificación ya está registrada por otro usuario';
+    END IF;
+
+    IF p_correo IS NULL OR TRIM(p_correo) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El correo es obligatorio';
+    END IF;
+
+    IF TRIM(p_correo) NOT REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El correo tiene un formato inválido';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM personas
+         WHERE correo = LOWER(TRIM(p_correo))
+           AND id <> p_persona_id
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El correo ya está registrado por otro usuario';
+    END IF;
+
+    UPDATE personas
+       SET nombre         = TRIM(p_nombre),
+           identificacion = TRIM(p_identificacion),
+           correo         = LOWER(TRIM(p_correo)),
+           telefono       = IF(TRIM(p_telefono) = '', NULL, TRIM(p_telefono))
+     WHERE id = p_persona_id
+       AND tipo = 'CLIENTE';
+
+    COMMIT;
+END¬¬
+
 
 -- P7. Crear empleado (persona + empleado)
 DROP PROCEDURE IF EXISTS sp_crear_empleado¬¬

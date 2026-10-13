@@ -1,6 +1,6 @@
 package Dao;
 
-import Model.entidad.SistemasOperativos;
+import Model.SistemasOperativos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

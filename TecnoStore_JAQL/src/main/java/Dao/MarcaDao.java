@@ -1,6 +1,6 @@
 package Dao;
 
-import Model.entidad.Marca;
+import Model.Marca;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

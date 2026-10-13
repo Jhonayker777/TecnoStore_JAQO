@@ -2,6 +2,8 @@ package Control;
 
 import Dao.ClientesDao;
 import Dao.EmpleadoDao;
+import Model.Cliente;
+import Model.Empleado;
 import View.VistaLogin;
 
 public class LoginControl {
@@ -32,9 +34,12 @@ public class LoginControl {
 
         String correo = login.correo();
         String contraseña = login.contraseña();
-        
-        if (clienteDao.login(correo, contraseña)) {
-            System.out.println("Secion iniciada correctamente");
+        Cliente sesion = clienteDao.login(correo, contraseña);
+        if (sesion != null) {
+
+            ClientesControl cliente = new ClientesControl(sesion);
+            cliente.menu();
+
         } else {
             System.out.println("Error al iniciar sesion");
         }
@@ -43,9 +48,11 @@ public class LoginControl {
     private void Empleado() {
         String correo = login.correo();
         String contraseña = login.contraseña();
-        
-        if (empleadoDao.login(correo, contraseña)) {
-            System.out.println("Secion iniciada correctamente");
+        Empleado sesion = empleadoDao.login(correo, contraseña);
+
+        if (sesion != null) {
+            
+            EmpleadosControl empleado = new EmpleadosControl(sesion);
         } else {
             System.out.println("Error al iniciar sesion");
         }

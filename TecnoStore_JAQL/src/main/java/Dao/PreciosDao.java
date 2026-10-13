@@ -1,6 +1,6 @@
 package Dao;
 
-import Model.entidad.Precio;
+import Model.Precio;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

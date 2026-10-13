@@ -7,6 +7,7 @@ import View.validaciones.Texto;
 import java.util.Scanner;
 
 public class VistaCelulares {
+
     private static final Scanner SCANNER = new Scanner(System.in);
 
     private static final Texto TEXTO = new Texto(SCANNER);
@@ -26,6 +27,7 @@ public class VistaCelulares {
                               6. Ver stock bajo
                               0. Volver
                               """);
-
     }
+    
+    
 }

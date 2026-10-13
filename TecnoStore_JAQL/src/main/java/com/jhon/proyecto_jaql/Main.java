@@ -3,11 +3,11 @@ package com.jhon.proyecto_jaql;
 import Control.LoginControl;
 import Dao.CelularDao;
 import Dao.PreciosDao;
-import Model.entidad.CategoriaGama;
-import Model.entidad.Celular;
-import Model.entidad.Marca;
-import Model.entidad.Precio;
-import Model.entidad.SistemasOperativos;
+import Model.CategoriaGama;
+import Model.Celular;
+import Model.Marca;
+import Model.Precio;
+import Model.SistemasOperativos;
 
 public class Main {
 

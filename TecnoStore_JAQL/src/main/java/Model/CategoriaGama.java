@@ -1,4 +1,4 @@
-package Model.entidad;
+package Model;
 
 public enum CategoriaGama {
     ALTA(1, "Alta"),

@@ -1,9 +1,11 @@
 package View;
 
+import Model.Cliente;
 import View.validaciones.Decimal;
 import View.validaciones.Entero;
 import View.validaciones.Entrada;
 import View.validaciones.Texto;
+import java.util.List;
 import java.util.Scanner;
 
 public class VistaClientes {
@@ -28,5 +30,11 @@ public class VistaClientes {
                               0. Volver
                               """);
 
+    }
+
+    public void mostrar(List<Cliente> lista) {
+        for (Cliente cliente : lista) {
+            System.out.println(cliente);
+        }
     }
 }

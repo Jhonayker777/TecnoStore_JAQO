@@ -1,7 +1,8 @@
 package Dao;
 
-import Model.entidad.Cargo;
-import Model.entidad.Empleado;
+import Model.Cargo;
+import Model.Celular;
+import Model.Empleado;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmpleadoDao {
 
@@ -110,24 +113,55 @@ public class EmpleadoDao {
         }
         return null;
     }
-    
-    public boolean login(String correo, String contraseña) {
+
+    public List<Empleado> listar() {
+        List<Empleado> lista = new ArrayList<>();
         try (Connection con = c.conexion()) {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("""
-                                           SELECT p.correo, e.contraseña FROM
+                                    SELECT p.id, p.nombre, p.identificacion,
+                                    p.correo, p.telefono, e.cargo, e.salario,
+                                    e.fecha_ingreso, e.activo
+                                    FROM personas p INNER JOIN empleados e
+                                    ON e.persona_id = p.id WHERE p.tipo = 'EMPLEADO';
+                                    """);
+            while (rs.next()) {
+                lista.add(new Empleado.Builder()
+                        .id(rs.getInt(1))
+                        .nombre(rs.getString(2))
+                        .identificacion(rs.getString(3))
+                        .correo(rs.getString(4))
+                        .telefono(rs.getString(5))
+                        .cargo(Cargo.fromEtiqueta(rs.getString(6)))
+                        .salario(rs.getDouble(7))
+                        .fechaIngreso(rs.getDate(8))
+                        .activo(rs.getBoolean(9))
+                        .build());
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al listar clientes" + e);
+        }
+        return null;
+    }
+
+    public Empleado login(String correo, String contraseña) {
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("""
+                                           SELECT p.correo, e.contraseña, p.id FROM
                                            empleados e INNER JOIN personas p
                                            ON e.persona_id = p.id
                                            WHERE p.tipo = 'EMPLEADO';
                                         """);
             while (rs.next()) {
                 if (rs.getString(1).equalsIgnoreCase(correo) && rs.getString(2).equals(contraseña)) {
-                    return true;
+                    return buscar(rs.getLong(3));
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error en el login Empleado"+ e);
+            System.out.println("Error en el login Empleado" + e);
         }
-        return false;
+        return null;
     }
 }
