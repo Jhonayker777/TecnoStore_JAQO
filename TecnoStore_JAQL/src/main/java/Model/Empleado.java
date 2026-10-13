@@ -85,7 +85,7 @@ public class Empleado extends Persona {
 
     public static class Builder {
 
-        private int id;
+        private long id;
         private String nombre;
         private String identificacion;
         private String correo;
@@ -96,7 +96,7 @@ public class Empleado extends Persona {
         private String contraseña;
         private boolean activo = true;
 
-        public Builder id(int id) {
+        public Builder id(long id) {
             this.id = id;
             return this;
         }

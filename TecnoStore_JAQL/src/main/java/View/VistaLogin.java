@@ -28,7 +28,7 @@ public class VistaLogin {
         return entrada.entero("""
                               1- Cliente.
                               2- Empleado.
-                              3- Salir.
+                              0- Salir.
                               """);
     }
 

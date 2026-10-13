@@ -21,20 +21,77 @@ public class VistaClientes {
     public int principal() {
 
         return entrada.entero("""
+                              
                               1. Registrar cliente
                               2. Actualizar cliente
-                              3. Eliminar 
                               4. Buscar por identificacion
                               5. Listar Todos
-                              6. Ver stock bajo
+                              0. Volver
+                              """);
+
+    }
+    
+    public int sesion() {
+
+        return entrada.entero("""
+                              
+                              1. Registrarse
+                              2. Iniciar sesion
                               0. Volver
                               """);
 
     }
 
     public void mostrar(List<Cliente> lista) {
-        for (Cliente cliente : lista) {
-            System.out.println(cliente);
-        }
+        System.out.println("------------------Clientes----------------------");
+        lista.forEach(System.out::println);
+        System.out.println("-------------------------------------------------");
     }
+
+    protected String cambiarContraseña() {
+        String newContraseña1 = entrada.texto("Ingrese una contraseña ");
+        String newContraseña2 = entrada.texto("Ingrese nuevamente la contraseña");
+
+        while (!newContraseña1.trim().equals(newContraseña2.trim())) {
+            System.out.println("Las contraseñas no son iguales");
+            newContraseña1 = entrada.texto("Ingrese la contraseña que desea cambiar");
+            newContraseña2 = entrada.texto("Ingrese nuevamente la contraseña que desea cambiar");
+        }
+
+        return newContraseña1;
+    }
+
+    public String contraseñaValida(String contraseñaSystem) {
+        String contraseñaUser = entrada.texto("Ingrese Ingrese su antigua contraseña");
+        if (contraseñaSystem.equals(contraseñaUser.trim())) {
+            System.out.println("Contraseña validada");
+            return cambiarContraseña();
+        }
+        return null;
+    }
+
+    public Cliente registrar() {
+
+        return new Cliente.Builder()
+                .nombre(entrada.texto("Ingrese su nombre"))
+                .identificacion(entrada.texto("Ingrese su identificacion"))
+                .correo(entrada.texto("Ingrese su correo"))
+                .telefono(entrada.texto("Ingrese su telefono"))
+                .contraseña(cambiarContraseña())
+                .build();
+
+    }
+
+    public Cliente actualizar(long id) {
+        return new Cliente.Builder()
+                .id(id)
+                .nombre(entrada.texto("Ingrese su nombre"))
+                .identificacion(entrada.texto("Ingrese su identificacion"))
+                .correo(entrada.texto("Ingrese su correo"))
+                .telefono(entrada.texto("Ingrese su telefono"))
+                .contraseña(cambiarContraseña())
+                .build();
+
+    }
+
 }

@@ -36,7 +36,6 @@ public class SistemasOperativosDao {
                     return so;
                 }
             }
-            System.out.println("Se encontro el sistema operativo");
         } catch (SQLException e) {
             System.out.println("Error al buscar el sistema operativo : " + e);
         }

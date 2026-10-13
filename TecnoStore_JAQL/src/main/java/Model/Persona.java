@@ -2,7 +2,7 @@ package Model;
 
 public abstract class Persona {
 
-    private int id;
+    private long id;
     private String nombre;
     private String identificacion;
     private String correo;
@@ -11,7 +11,7 @@ public abstract class Persona {
     protected Persona() {
     }
 
-    protected Persona(int id, String nombre, String identificacion,
+    protected Persona(long id, String nombre, String identificacion,
             String correo, String telefono) {
         this.id = id;
         this.nombre = nombre;
@@ -22,7 +22,7 @@ public abstract class Persona {
 
     public abstract String getRol();
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -65,6 +65,7 @@ public abstract class Persona {
     @Override
     public String toString() {
         return """
+               
                Id: %s
                Nombre: %S
                Identificacion: %S

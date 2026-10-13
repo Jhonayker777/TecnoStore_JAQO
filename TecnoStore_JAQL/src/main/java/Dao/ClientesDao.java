@@ -3,6 +3,7 @@ package Dao;
 import Model.Cliente;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +36,7 @@ public class ClientesDao {
 
     }
 
-    public Cliente buscar(long id) {
+    public Cliente buscarId(long id) {
         try (Connection con = c.conexion()) {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("""
@@ -53,6 +54,63 @@ public class ClientesDao {
                             .correo(rs.getString(4))
                             .telefono(rs.getString(5))
                             .fechaRegistro(rs.getDate(6))
+                            .contraseña(rs.getString(7))
+                            .build();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar empleado:" + e.getMessage());
+        }
+        return null;
+    }
+
+    public Cliente buscarDocumento(String identificacion) {
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("""
+                                    SELECT p.id, p.nombre, p.identificacion,
+                                    p.correo, p.telefono, c.fecha_registro, c.contraseña
+                                    FROM clientes c INNER JOIN personas p
+                                    ON c.persona_id = p.id WHERE p.tipo = 'CLIENTE';
+                                    """);
+            while (rs.next()) {
+                if (rs.getString(3).equals(identificacion.trim())) {
+                    return new Cliente.Builder()
+                            .id(rs.getInt(1))
+                            .nombre(rs.getString(2))
+                            .identificacion(rs.getString(3))
+                            .correo(rs.getString(4))
+                            .telefono(rs.getString(5))
+                            .fechaRegistro(rs.getDate(6))
+                            .contraseña(rs.getString(7))
+                            .build();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar empleado:" + e.getMessage());
+        }
+        return null;
+    }
+    
+    public Cliente buscarCorreo(String correo) {
+        try (Connection con = c.conexion()) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("""
+                                    SELECT p.id, p.nombre, p.identificacion,
+                                    p.correo, p.telefono, c.fecha_registro, c.contraseña
+                                    FROM clientes c INNER JOIN personas p
+                                    ON c.persona_id = p.id WHERE p.tipo = 'CLIENTE';
+                                    """);
+            while (rs.next()) {
+                if (rs.getString(4).equals(correo.trim())) {
+                    return new Cliente.Builder()
+                            .id(rs.getInt(1))
+                            .nombre(rs.getString(2))
+                            .identificacion(rs.getString(3))
+                            .correo(rs.getString(4))
+                            .telefono(rs.getString(5))
+                            .fechaRegistro(rs.getDate(6))
+                            .contraseña(rs.getString(7))
                             .build();
                 }
             }
@@ -82,6 +140,7 @@ public class ClientesDao {
                         .fechaRegistro(rs.getDate(6))
                         .build());
             }
+            return lista;
         } catch (SQLException e) {
             System.out.println("Error al listar clientes" + e);
         }
@@ -116,12 +175,25 @@ public class ClientesDao {
                                         """);
             while (rs.next()) {
                 if (rs.getString(1).equalsIgnoreCase(correo) && rs.getString(2).equals(contraseña)) {
-                    return buscar(rs.getLong(3));
+                    return buscarId(rs.getLong(3));
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error en el login");
+            System.out.println("Error en el login" + e);
         }
         return null;
+    }
+
+    public void Contraseña(long id, String contraseña) {
+        try (Connection con = c.conexion()) {
+            String sql = "update clientes set contraseña=? where persona_id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, contraseña);
+            ps.setLong(2, id);
+            ps.executeUpdate();
+            System.out.println("Contraseña actualizada correctamente! xD");
+        } catch (Exception e) {
+            System.out.println("Error en contraseña: " + e);
+        }
     }
 }

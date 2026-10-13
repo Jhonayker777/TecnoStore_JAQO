@@ -19,6 +19,7 @@ public class VistaTienda {
     public int principal() {
 
         return entrada.entero("""
+                              
                               1. Ver catalogo
                               2. Buscar celular
                               3. ver por marca

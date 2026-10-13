@@ -22,7 +22,7 @@ public class MarcaDao {
             ps.executeUpdate();
             System.out.println("Sistema operativo agregado correctamente! xD");
         } catch (Exception e) {
-            System.out.println("Error al agregar un sistema operativo: " + e.getMessage());
+            System.out.println("Error al agregar una marca: " + e.getMessage());
         }
     }
 
@@ -36,9 +36,8 @@ public class MarcaDao {
                     return m;
                 }
             }
-            System.out.println("Se encontro el sistema operativo");
         } catch (SQLException e) {
-            System.out.println("Error al buscar el sistema operativo : " + e);
+            System.out.println("Error al buscar la marca : " + e);
         }
         return null;
     }
@@ -47,7 +46,7 @@ public class MarcaDao {
         try (Connection con = c.conexion()) {
             List<Marca> lista = new ArrayList<>();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from marcas");
+            ResultSet rs = st.executeQuery("select * from marcas order by id");
             while (rs.next()) {
                 lista.add(new Marca(rs.getLong(1), rs.getString(2)));
             }

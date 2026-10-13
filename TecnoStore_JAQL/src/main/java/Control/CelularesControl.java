@@ -37,11 +37,14 @@ public class CelularesControl {
                     eliminar();
                 }
                 case 4 -> {
-                    vista.mostrar(celular.listar());
+                    catalogo();
                 }
                 case 5 -> {
                     Celular celu = celular.buscar(entrada.enteroGrande("Ingrese el id del celular"));
                     System.out.println(celu);
+                }
+                case 0 -> {
+                    System.out.println("");
                 }
                 default -> {
                     System.out.println("Opcion no encontrada!");
@@ -68,5 +71,14 @@ public class CelularesControl {
         } else {
             celular.eliminar(celu.getId());
         }
+    }
+
+    public void catalogo() {
+        if (celular.listar() != null) {
+            vista.mostrar(celular.listar());
+        } else {
+            System.out.println("El catalogo esta vacio");
+        }
+        System.out.println("");
     }
 }
