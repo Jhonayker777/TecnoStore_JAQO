@@ -86,7 +86,6 @@ public class LoginControl {
     }
 
     protected void sesionCliente() {
-
         String correo = login.correo();
         String contraseña = login.contraseña();
         Cliente sesion = clienteDao.login(correo, contraseña);

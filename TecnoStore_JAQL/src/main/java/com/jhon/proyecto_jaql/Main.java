@@ -18,6 +18,7 @@ import View.VistaReportes;
 public class Main {
 
     public static void main(String[] args) {
+//        ClientesDao cliente = new ClientesDao();
 //        LoginControl l = new LoginControl();
 //        l.menu();
 //        ClientesDao cd = new ClientesDao();
