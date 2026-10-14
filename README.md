@@ -945,11 +945,11 @@ reclutador o compañero entienda la aplicación sin ejecutarla.
 ### Administración de celulares
 
 
-(![alt text](image.png))
+(![alt text](img/Celulares.png))
 
 ### Reportes
 
-![alt text](image-1.png)
+![alt text](img/reportes.png)
 > Las imágenes anteriores son placeholders. Crea los archivos
 > correspondientes o reemplaza las rutas por las capturas reales para
 > evitar enlaces rotos en GitHub.
