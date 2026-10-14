@@ -904,25 +904,6 @@ proyecto.
 
 ------------------------------------------------------------------------
 
-## 🔐 Credenciales de prueba
-
-Las siguientes credenciales fueron definidas para pruebas del proyecto.
-Solo funcionarán si los usuarios correspondientes existen en la base de
-datos cargada.
-
-  Perfil          Correo                         Contraseña       Cargo indicado
-  --------------- ------------------------------ ---------------- ----------------
-  Cliente         `lauu@tecnostore.com`          `Incorrecta1.`   Cliente
-  Empleado        `pedro.lopez@tecnostore.com`   `vendedor123`    Vendedor
-  Administrador   `sofia.mora@tecnostore.com`    `admin123`       Admin
-
-> **Precaución:** la contraseña del cliente se conserva tal como fue
-> proporcionada, aunque su valor parece estar marcado como incorrecto.
-> Si no permite iniciar sesión, verifica el script de datos de prueba o
-> registra un cliente nuevo. Cambia o elimina estas credenciales antes
-> de cualquier despliegue real y no reutilices contraseñas de prueba.
-
-------------------------------------------------------------------------
 
 ## 📸 Capturas de pantalla
 
@@ -979,12 +960,6 @@ reclutador o compañero entienda la aplicación sin ejecutarla.
                           `Empleado`              con varios atributos y
                                                   mejorar la legibilidad
                                                   de su creación.
-
-  Factory                 Componente o método de  Encapsular la lógica de
-                          creación de entidades   creación y centralizar
-                                                  la selección del tipo
-                                                  de objeto que debe
-                                                  construirse.
   -----------------------------------------------------------------------
 
 ### Beneficios
@@ -1189,16 +1164,6 @@ diseño de software y bases de datos.
 -   LinkedIn: [Jhonayker
     Quintero](https://linkedin.com/in/jhonayker-quintero)
 
-------------------------------------------------------------------------
-
-## 📄 Licencia
-
-Este proyecto se distribuye bajo la licencia **MIT**. Consulta el
-archivo [`LICENSE`](./LICENSE) para conocer los términos de uso.
-
-Si todavía no existe el archivo `LICENSE`, crea uno con el texto oficial
-de la licencia MIT y el año y titular correspondientes antes de afirmar
-que el repositorio está formalmente licenciado bajo MIT.
 
 ------------------------------------------------------------------------
 
