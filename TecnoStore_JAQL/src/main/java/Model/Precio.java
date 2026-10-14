@@ -17,6 +17,9 @@ public class Precio {
         this.monto = monto;
     }
 
+    public Precio() {
+    }
+
     public long getId() {
         return id;
     }

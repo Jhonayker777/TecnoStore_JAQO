@@ -45,7 +45,6 @@ CREATE TABLE empleados (
     persona_id     INT PRIMARY KEY,
     cargo          ENUM('Vendedor','Admin','Bodega','Gerente') NOT NULL,
     salario        DOUBLE NOT NULL,
-    moneda         CHAR(3) NOT NULL DEFAULT 'COP',
     fecha_ingreso  DATE NOT NULL,
     activo         BOOLEAN NOT NULL DEFAULT TRUE,
     contraseña     VARCHAR(20) NOT NULL,
@@ -63,7 +62,6 @@ CREATE TABLE celulares (
     so_id    INT NOT NULL, 
     gama_id  INT NOT NULL,
     precio   DOUBLE NOT NULL,
-    moneda   CHAR(3) NOT NULL DEFAULT 'COP',
     stock    INT NOT NULL DEFAULT 0,
 
     CONSTRAINT fk_cel_marca FOREIGN KEY (marca_id) REFERENCES marcas(id)
@@ -95,7 +93,6 @@ CREATE TABLE detalle_ventas (
     celular_id      INT NOT NULL,
     cantidad        INT NOT NULL,
     precio_unitario DOUBLE(12,2) NOT NULL,
-    moneda          CHAR(3) NOT NULL DEFAULT 'COP',
 
     CONSTRAINT fk_det_venta FOREIGN KEY (venta_id)
         REFERENCES ventas(id)

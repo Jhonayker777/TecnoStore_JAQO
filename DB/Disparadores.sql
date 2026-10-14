@@ -412,16 +412,6 @@ BEGIN
     DECLARE v_activo BOOLEAN;
     DECLARE v_tipo   VARCHAR(10);
 
-    SELECT activo INTO v_activo FROM empleados WHERE persona_id = NEW.empleado_id;
-    IF v_activo IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El empleado no existe';
-    END IF;
-
-    IF v_activo = FALSE THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El empleado está inactivo';
-    END IF;
 
     SELECT tipo INTO v_tipo FROM personas WHERE id = NEW.cliente_id;
     IF v_tipo IS NULL OR v_tipo <> 'CLIENTE' THEN
@@ -442,9 +432,8 @@ BEFORE INSERT ON detalle_ventas
 FOR EACH ROW
 BEGIN
     DECLARE v_stock  INT;
-    DECLARE v_moneda CHAR(3);
 
-    SELECT stock, moneda INTO v_stock, v_moneda
+    SELECT stock,  INTO v_stock
       FROM celulares WHERE id = NEW.celular_id;
 
     IF v_stock IS NULL THEN
@@ -472,10 +461,6 @@ BEGIN
         SET MESSAGE_TEXT = 'El precio unitario debe ser mayor a cero';
     END IF;
 
-    IF NEW.moneda <> v_moneda THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La moneda del detalle no coincide con el celular';
-    END IF;
 END¬¬
 
 -- T13. AFTER INSERT detalle_ventas
@@ -498,7 +483,6 @@ BEGIN
 END¬¬
 
 -- T14. AFTER DELETE detalle_ventas
-
 DROP TRIGGER IF EXISTS trg_detalle_after_delete¬¬
 CREATE TRIGGER trg_detalle_after_delete
 AFTER DELETE ON detalle_ventas

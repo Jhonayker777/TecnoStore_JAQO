@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,9 @@ public class Venta {
 
     private int id;
     private Cliente cliente;
-    private Date fecha;
+    private LocalDateTime fecha;
     private List<CelularVenta> items = new ArrayList<>();
+    private double total;
 
     public Venta() {
     }
@@ -63,11 +65,11 @@ public class Venta {
         this.cliente = c;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date f) {
+    public void setFecha(LocalDateTime f) {
         this.fecha = f;
     }
 
@@ -84,4 +86,13 @@ public class Venta {
             items.add(item);
         }
     }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+    
 }

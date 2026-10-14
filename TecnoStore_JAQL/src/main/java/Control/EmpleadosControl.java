@@ -29,9 +29,6 @@ public class EmpleadosControl {
                 case 3 -> {
                     celientControl.administrar();
                 }
-                case 4 -> {
-                    System.out.println("Registrar venta");
-                }
                 case 5 -> {
                     System.out.println("Ver ventas");
                 }
@@ -68,9 +65,6 @@ public class EmpleadosControl {
                 case 3 -> {
                     celientControl.administrar();
                 }
-                case 4 -> {
-                    System.out.println("Registrar venta");
-                }
                 case 5 -> {
                     System.out.println("Ver ventas");
                 }
@@ -97,9 +91,6 @@ public class EmpleadosControl {
             switch (op) {
                 case 1 -> {
                     celular.catalogo();
-                }
-                case 2 -> {
-                    System.out.println("Registrar venta");
                 }
                 case 3 -> {
                     System.out.println("ver ventas");

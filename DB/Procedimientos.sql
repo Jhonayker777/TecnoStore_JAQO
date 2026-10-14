@@ -4,81 +4,21 @@ USE TecnoStore_JAQO;
 
 DELIMITER ¬¬
 
--- P1. Registrar venta simple
 DROP PROCEDURE IF EXISTS sp_registrar_venta¬¬
 CREATE PROCEDURE sp_registrar_venta(
-    IN  p_cliente_id  INT,
-    IN  p_empleado_id INT,
-    IN  p_celular_id  INT,
-    IN  p_cantidad    INT,
-    OUT p_venta_id    INT,
-    OUT p_total       DOUBLE
-)
-BEGIN
-    DECLARE v_stock  INT;
-    DECLARE v_activo BOOLEAN;
-    DECLARE v_tipo   VARCHAR(10);
-
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
-
-    START TRANSACTION;
-
-    SELECT tipo INTO v_tipo FROM personas WHERE id = p_cliente_id;
-    IF v_tipo IS NULL OR v_tipo <> 'CLIENTE' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El cliente no existe o no es CLIENTE';
-    END IF;
-
-    SELECT activo INTO v_activo FROM empleados WHERE persona_id = p_empleado_id;
-    IF v_activo IS NULL OR v_activo = FALSE THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El empleado no existe o está inactivo';
-    END IF;
-
-    SELECT stock INTO v_stock FROM celulares WHERE id = p_celular_id;
-    IF v_stock IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El celular no existe';
-    END IF;
-
-    IF p_cantidad > v_stock THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Stock insuficiente';
-    END IF;
-
-    INSERT INTO ventas (cliente_id, empleado_id, fecha)
-    VALUES (p_cliente_id, p_empleado_id, NOW());
-
-    SET p_venta_id = LAST_INSERT_ID();
-
-    INSERT INTO detalle_ventas (venta_id, celular_id, cantidad, precio_unitario, moneda)
-    SELECT p_venta_id, p_celular_id, p_cantidad, precio, moneda
-      FROM celulares WHERE id = p_celular_id;
-
-    SET p_total = fn_total_venta(p_venta_id);
-    COMMIT;
-END¬¬
-
--- P2. Registrar venta múltiple con JSON
-DROP PROCEDURE IF EXISTS sp_registrar_venta_multiple¬¬
-CREATE PROCEDURE sp_registrar_venta_multiple(
-    IN  p_cliente_id  INT,
-    IN  p_empleado_id INT,
-    IN  p_items_json  JSON,
-    OUT p_venta_id    INT,
-    OUT p_total       DOUBLE
+    IN  p_cliente_id INT,
+    IN  p_items_json JSON,
+    OUT p_venta_id   INT,
+    OUT p_total      DOUBLE
 )
 BEGIN
     DECLARE v_idx      INT DEFAULT 0;
     DECLARE v_len      INT;
     DECLARE v_celular  INT;
     DECLARE v_cantidad INT;
+    DECLARE v_precio   DOUBLE;
     DECLARE v_stock    INT;
-    DECLARE v_activo   BOOLEAN;
+    DECLARE v_subtotal DOUBLE DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -88,36 +28,71 @@ BEGIN
 
     START TRANSACTION;
 
-    SELECT activo INTO v_activo FROM empleados WHERE persona_id = p_empleado_id;
-    IF v_activo IS NULL OR v_activo = FALSE THEN
+    -- 1. Validar cliente
+    IF NOT EXISTS (SELECT 1 FROM clientes WHERE persona_id = p_cliente_id) THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El empleado no existe o está inactivo';
+        SET MESSAGE_TEXT = 'El cliente no existe';
     END IF;
 
-    INSERT INTO ventas (cliente_id, empleado_id, fecha)
-    VALUES (p_cliente_id, p_empleado_id, NOW());
-    SET p_venta_id = LAST_INSERT_ID();
+    -- 2. Validar items
+    IF p_items_json IS NULL OR JSON_LENGTH(p_items_json) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La venta debe tener al menos un item';
+    END IF;
 
+    -- 3. Calcular subtotal
     SET v_len = JSON_LENGTH(p_items_json);
 
     WHILE v_idx < v_len DO
         SET v_celular  = JSON_EXTRACT(p_items_json, CONCAT('$[', v_idx, '].celular_id'));
         SET v_cantidad = JSON_EXTRACT(p_items_json, CONCAT('$[', v_idx, '].cantidad'));
 
-        SELECT stock INTO v_stock FROM celulares WHERE id = v_celular;
-        IF v_stock IS NULL OR v_cantidad > v_stock THEN
+        SELECT p.monto INTO v_precio
+          FROM celulares c
+          JOIN precios p ON p.id = c.precio_id
+         WHERE c.id = v_celular;
+
+        SET v_subtotal = v_subtotal + (v_precio * v_cantidad);
+        SET v_idx = v_idx + 1;
+    END WHILE;
+
+    SET p_total = ROUND(v_subtotal * 1.19, 2);
+
+    -- 4. Insertar cabecera (sin empleado_id)
+    INSERT INTO ventas (cliente_id, fecha, total)
+    VALUES (p_cliente_id, NOW(), p_total);
+
+    SET p_venta_id = LAST_INSERT_ID();
+
+    -- 5. Insertar detalles
+    SET v_idx = 0;
+
+    WHILE v_idx < v_len DO
+        SET v_celular  = JSON_EXTRACT(p_items_json, CONCAT('$[', v_idx, '].celular_id'));
+        SET v_cantidad = JSON_EXTRACT(p_items_json, CONCAT('$[', v_idx, '].cantidad'));
+
+        SELECT c.stock, p.monto
+          INTO v_stock, v_precio
+          FROM celulares c
+          JOIN precios p ON p.id = c.precio_id
+         WHERE c.id = v_celular;
+
+        IF v_stock IS NULL THEN
             SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Stock insuficiente para uno de los items';
+            SET MESSAGE_TEXT = 'El celular no existe';
         END IF;
 
-        INSERT INTO detalle_ventas (venta_id, celular_id, cantidad, precio_unitario, moneda)
-        SELECT p_venta_id, v_celular, v_cantidad, precio, moneda
-          FROM celulares WHERE id = v_celular;
+        IF v_cantidad > v_stock THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Stock insuficiente';
+        END IF;
+
+        INSERT INTO detalle_ventas (venta_id, celular_id, cantidad, precio_unitario)
+        VALUES (p_venta_id, v_celular, v_cantidad, v_precio);
 
         SET v_idx = v_idx + 1;
     END WHILE;
 
-    SET p_total = fn_total_venta(p_venta_id);
     COMMIT;
 END¬¬
 

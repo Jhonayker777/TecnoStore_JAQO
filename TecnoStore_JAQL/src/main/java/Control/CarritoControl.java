@@ -1,8 +1,11 @@
 package Control;
 
+import Dao.VentaDao;
 import Model.Carrito;
 import Model.Cliente;
 import Model.Venta;
+import View.VistaReportes;
+import View.VistaTienda;
 import View.VistaVentas;
 
 public class CarritoControl {
@@ -10,6 +13,9 @@ public class CarritoControl {
     private Carrito carrito;
     private final Cliente cliente;
     private VistaVentas vista = new VistaVentas();
+    private VistaTienda vistaTienda = new VistaTienda(carrito);
+
+    VentaDao ventaDao = new VentaDao();
 
     public CarritoControl(Cliente cliente, Carrito carrito) {
         this.cliente = cliente;
@@ -25,9 +31,13 @@ public class CarritoControl {
                     registrarCompra();
                 }
                 case 2 -> {
+                    eliminar();
+                }
+                case 3 -> {
+                    carrito.vaciar();
                 }
                 case 0 -> {
-                    System.out.println("Cerrando sesion...");
+                    System.out.println("Volviendo");
                 }
                 default -> {
                     System.out.println("Opcion no encontrada!");
@@ -44,9 +54,18 @@ public class CarritoControl {
                 return;
             }
             Venta venta = new Venta(cliente, carrito.getItems());
+            ventaDao.registrar(venta);
+
+            VistaReportes reporteControl = new VistaReportes();
+            reporteControl.generar();
 
         } else {
             System.out.println("Regresando");
         }
+    }
+
+    private void eliminar() {
+        vistaTienda.verCarrito();
+        carrito.eliminar(vista.pedirId());
     }
 }

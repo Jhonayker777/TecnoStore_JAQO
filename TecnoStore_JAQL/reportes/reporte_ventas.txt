@@ -1,0 +1,55 @@
+==================================================        REPORTE DE VENTAS - TECNOSTORE             ===================================================== RESUMEN GENERAL ===
+
+Número de ventas:    9
+Total facturado:     $10.576,72
+Ticket promedio:     $1.175,19
+Unidades vendidas:   16
+
+=== TOP 3 MÁS VENDIDOS ===
+
+1. Samsung Moto g85 5g → 2 unidades
+2. Samsung Moto g85 5g → 2 unidades
+3. Samsung Moto g85 5g → 2 unidades
+
+=== VENTAS POR MES ===
+
+2026-03 → $0,00
+2026-10 → $10.576,72
+
+=== CELULARES CON STOCK BAJO ===
+
+No hay celulares con stock bajo.
+
+=== TODAS LAS VENTAS ===
+
+Venta #12 | 2026-10-13T20:50:15 | Cliente: Ana Gomez | Total: $10.576,72
+   - Moto g85 5g x2 @ $4.444,00
+
+Venta #11 | 2026-10-13T20:44:14 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x2 @ $4.444,00
+   - Moto g85 5g x1 @ $4.444,00
+
+Venta #10 | 2026-10-13T20:42:18 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x1 @ $4.444,00
+
+Venta #9 | 2026-10-13T20:40:03 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x1 @ $4.444,00
+
+Venta #8 | 2026-10-13T20:36:51 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x1 @ $4.444,00
+
+Venta #7 | 2026-10-13T20:26:38 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x1 @ $1,00
+   - Moto g85 5g x1 @ $1,00
+
+Venta #6 | 2026-10-13T20:26:14 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x2 @ $1,00
+   - Moto g85 5g x1 @ $1,00
+
+Venta #5 | 2026-10-13T20:24:29 | Cliente: Ana Gomez | Total: $0,00
+   - Moto g85 5g x2 @ $1,00
+   - Moto g85 5g x1 @ $1,00
+
+Venta #1 | 2026-03-28T15:00 | Cliente: Camila Vargas | Total: $0,00
+
+==================================================              FIN DEL REPORTE                    ==================================================

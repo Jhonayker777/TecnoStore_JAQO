@@ -28,4 +28,8 @@ public class VistaVentas {
         String conf = entrada.texto("¿Confirmar compra? (s/n): ");
         return conf.equalsIgnoreCase("s");
     }
+    
+    public int pedirId(){
+        return entrada.entero("Ingrese el id del prodcuto a eliminar");
+    }
 }
