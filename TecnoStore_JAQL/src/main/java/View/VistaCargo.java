@@ -18,7 +18,7 @@ public class VistaCargo {
     Cargo escogerCargo() {
 
         Cargo cargo = Cargo.fromEtiqueta(entrada.texto("""
-                                                                      Seleccione el numero de la gama:
+                                                                      Seleccione el cargo:
                                                                       - Admin
                                                                       - Bodega
                                                                       - Gerente

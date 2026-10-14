@@ -93,5 +93,18 @@ public class Venta {
     public double getTotal() {
         return total;
     }
+
+    @Override
+    public String toString() {
+        return """
+               
+               id: %s
+               Cliente: %s
+               Celulares: %s
+               total: %s
+               """.formatted(id,cliente.getNombre(),items);
+    }
+    
+    
     
 }

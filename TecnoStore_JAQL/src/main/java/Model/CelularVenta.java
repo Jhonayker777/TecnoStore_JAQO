@@ -60,11 +60,11 @@ public class CelularVenta {
     @Override
     public String toString() {
         return """
-               
+               CelilarId:%s
                Celular: %s
                Cantidad: %s
                PrecioUnitario: %s
-               """.formatted(celular.getModelo(), cantidad, precioUnitario.getMonto());
+               """.formatted(celular.getId(), celular.getModelo(), cantidad, precioUnitario.getMonto());
     }
 
 }

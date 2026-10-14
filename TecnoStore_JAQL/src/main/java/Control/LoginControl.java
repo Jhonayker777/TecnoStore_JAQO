@@ -32,7 +32,7 @@ public class LoginControl {
                 default ->
                     System.out.println("Opcion no encontrada");
             }
-        } while (op != 3);
+        } while (op != 0);
     }
 
     private void Cliente() {

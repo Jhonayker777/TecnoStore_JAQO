@@ -92,7 +92,7 @@ BEGIN
         SET MESSAGE_TEXT = 'Fecha de ingreso fuera de rango';
     END IF;
     
-    IF NOT fn_contraseña_valida(NEW.contraseña) THEN
+    IF NOT fn_validar_contraseña(NEW.contraseña) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Contraseña inválida (mínimo 8 caracteres, al menos una letra y un número)';
     END IF;
@@ -115,10 +115,6 @@ BEGIN
         SET MESSAGE_TEXT = 'La fecha de ingreso no puede ser futura';
     END IF;
 
-    IF NEW.activo = OLD.activo THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ya se encuentra en el estado actual';
-    END IF;
 
     IF NOT fn_validar_contraseña(NEW.contraseña) THEN
         SIGNAL SQLSTATE '45000'

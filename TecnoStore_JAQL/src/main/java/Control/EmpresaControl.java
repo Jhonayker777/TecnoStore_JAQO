@@ -3,15 +3,19 @@ package Control;
 import Dao.VentaDao;
 import Model.Empleado;
 import View.VistaEmpleados;
+import View.VistaReportes;
 import View.VistaVentas;
 
 public class EmpresaControl {
 
     private Empleado sesion;
     VentaDao ventasDaO = new VentaDao();
+
     ClienteControl celientControl = new ClienteControl();
     CelularesControl celular = new CelularesControl();
     Precioscontrol precioscontrol = new Precioscontrol();
+    EmpleadosControl empleadosControl = new EmpleadosControl();
+    ReporteControl reporteControl = new ReporteControl();
 
     VistaEmpleados vista = new VistaEmpleados();
     VistaVentas vistaVentas = new VistaVentas();
@@ -34,17 +38,17 @@ public class EmpresaControl {
                 case 3 -> {
                     celientControl.administrar();
                 }
+                case 4 -> {
+                    reporteControl.ventasPorMes();
+                }
                 case 5 -> {
-                    vistaVentas.listar(ventasDaO.listar());
+                    reporteControl.todos();
                 }
                 case 6 -> {
-                    System.out.println("Reportes");
-                }
-                case 7 -> {
                     precioscontrol.menu();
                 }
-                case 8 -> {
-                    System.out.println("Gestion empleados");
+                case 7 -> {
+                    empleadosControl.menu();
                 }
                 case 0 -> {
                     System.out.println("Cerrando sesion...");
@@ -70,13 +74,13 @@ public class EmpresaControl {
                 case 3 -> {
                     celientControl.administrar();
                 }
+                case 4 -> {
+                    reporteControl.todos();
+                }
                 case 5 -> {
-                    vistaVentas.listar(ventasDaO.listar());
+                    reporteControl.ventasPorMes();
                 }
                 case 6 -> {
-                    System.out.println("Reportes");
-                }
-                case 7 -> {
                     precioscontrol.menu();
                 }
                 case 0 -> {
@@ -88,8 +92,6 @@ public class EmpresaControl {
             }
         } while (op != 0);
     }
-
-    
 
     public void bodega() {
         int op;

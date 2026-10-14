@@ -10,16 +10,18 @@ import View.VistaVentas;
 
 public class CarritoControl {
 
-    private Carrito carrito;
+    private final Carrito carrito;
     private final Cliente cliente;
-    private VistaVentas vista = new VistaVentas();
-    private VistaTienda vistaTienda = new VistaTienda(carrito);
-
-    VentaDao ventaDao = new VentaDao();
+    private final VistaVentas vista = new VistaVentas();
+    private final VistaTienda vistaTienda;
+    private final VentaDao ventaDao = new VentaDao();
+    private final VistaReportes vistaReportes = new VistaReportes();
+    private final ReporteControl reporteControl = new ReporteControl();
 
     public CarritoControl(Cliente cliente, Carrito carrito) {
         this.cliente = cliente;
         this.carrito = carrito;
+        this.vistaTienda = new VistaTienda(carrito);
     }
 
     public void menuCarrito() {
@@ -27,45 +29,67 @@ public class CarritoControl {
         do {
             op = vista.menuCarrito();
             switch (op) {
-                case 1 -> {
+                case 1 ->
                     registrarCompra();
-                }
-                case 2 -> {
+                case 2 ->
                     eliminar();
-                }
-                case 3 -> {
-                    carrito.vaciar();
-                }
-                case 0 -> {
+                case 3 ->
+                    vaciar();
+                case 0 ->
                     System.out.println("Volviendo");
-                }
-                default -> {
-                    System.out.println("Opcion no encontrada!");
-                }
+                default ->
+                    System.out.println("Opción no encontrada");
             }
         } while (op != 0);
     }
 
     private void registrarCompra() {
-        boolean c = vista.confirmar();
-        if (c) {
-            if (carrito.getItems() == null || carrito.getItems().isEmpty()) {
-                System.out.println("El carrito esta vacio");
-                return;
-            }
-            Venta venta = new Venta(cliente, carrito.getItems());
-            ventaDao.registrar(venta);
-
-            VistaReportes reporteControl = new VistaReportes();
-            reporteControl.generar();
-
-        } else {
+        boolean confirmado = vista.confirmar();
+        if (!confirmado) {
             System.out.println("Regresando");
+            return;
         }
+
+        if (carrito.getItems() == null || carrito.getItems().isEmpty()) {
+            System.out.println("El carrito está vacío");
+            return;
+        }
+
+        Venta venta = new Venta(cliente, carrito.getItems());
+
+        ventaDao.registrar(venta);
+
+        vistaReportes.generar();
+
+        carrito.vaciar();
     }
 
     private void eliminar() {
+        if (carrito.estaVacio()) {
+            System.out.println("El carrito está vacío");
+            return;
+        }
+
         vistaTienda.verCarrito();
-        carrito.eliminar(vista.pedirId());
+
+        long celularId = vista.pedirId();
+
+        if (celularId == 0) {
+            System.out.println("Cancelado");
+            return;
+        }
+
+        if (!carrito.contiene(celularId)) {
+            System.out.println("No está en el carrito");
+            return;
+        }
+
+        carrito.eliminar(celularId);
+        System.out.println("Eliminado");
+    }
+
+    private void vaciar() {
+        carrito.vaciar();
+        System.out.println("Carrito vaciado");
     }
 }

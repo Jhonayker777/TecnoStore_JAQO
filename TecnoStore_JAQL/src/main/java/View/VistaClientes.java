@@ -27,6 +27,7 @@ public class VistaClientes {
                               4. Buscar por identificacion
                               5. Listar Todos
                               0. Volver
+                              
                               """);
 
     }
@@ -38,6 +39,7 @@ public class VistaClientes {
                               1. Registrarse
                               2. Iniciar sesion
                               0. Volver
+                              
                               """);
 
     }
@@ -54,8 +56,8 @@ public class VistaClientes {
 
         while (!newContraseña1.trim().equals(newContraseña2.trim())) {
             System.out.println("Las contraseñas no son iguales");
-            newContraseña1 = entrada.texto("Ingrese la contraseña que desea cambiar");
-            newContraseña2 = entrada.texto("Ingrese nuevamente la contraseña que desea cambiar");
+            newContraseña1 = entrada.texto("Ingrese la contraseña ");
+            newContraseña2 = entrada.texto("Ingrese nuevamente la contraseña");
         }
 
         return newContraseña1;

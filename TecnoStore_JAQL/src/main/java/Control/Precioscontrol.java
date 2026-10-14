@@ -27,7 +27,7 @@ public class Precioscontrol {
                 default ->
                     System.out.println("Opcion no encontrada");
             }
-        } while (op != 3);
+        } while (op != 0);
     }
 
     private void crear() {

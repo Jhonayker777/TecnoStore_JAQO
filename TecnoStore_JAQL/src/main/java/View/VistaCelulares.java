@@ -28,12 +28,14 @@ public class VistaCelulares {
     public int principal() {
 
         return entrada.entero("""
+                              
                               1. Registrar nuevo celular
                               2. Actualizar celular
                               3. Eliminar celular
                               4. Listar todos
                               5. Buscar por id
                               0. Volver
+                              
                               """);
     }
 

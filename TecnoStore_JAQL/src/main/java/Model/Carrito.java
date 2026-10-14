@@ -20,8 +20,13 @@ public class Carrito {
         items.add(new CelularVenta(celular, cantidad));
     }
 
-    public void eliminar(int celularId) {
+    public void eliminar(long celularId) {
         items.removeIf(i -> i.getCelular().getId() == celularId);
+    }
+
+    public boolean contiene(long celularId) {
+        return items.stream()
+                .anyMatch(item -> item.getCelular().getId() == celularId);
     }
 
     public void vaciar() {

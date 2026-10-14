@@ -1,26 +1,29 @@
 ==================================================        REPORTE DE VENTAS - TECNOSTORE             ===================================================== RESUMEN GENERAL ===
 
-Número de ventas:    9
-Total facturado:     $10.576,72
-Ticket promedio:     $1.175,19
-Unidades vendidas:   16
+Número de ventas:    10
+Total facturado:     $31.730,16
+Ticket promedio:     $3.173,02
+Unidades vendidas:   20
 
 === TOP 3 MÁS VENDIDOS ===
 
-1. Samsung Moto g85 5g → 2 unidades
+1. Samsung Moto g85 5g → 4 unidades
 2. Samsung Moto g85 5g → 2 unidades
 3. Samsung Moto g85 5g → 2 unidades
 
 === VENTAS POR MES ===
 
 2026-03 → $0,00
-2026-10 → $10.576,72
+2026-10 → $31.730,16
 
 === CELULARES CON STOCK BAJO ===
 
 No hay celulares con stock bajo.
 
 === TODAS LAS VENTAS ===
+
+Venta #13 | 2026-10-14T10:59:14 | Cliente: Lau | Total: $21.153,44
+   - Moto g85 5g x4 @ $4.444,00
 
 Venta #12 | 2026-10-13T20:50:15 | Cliente: Ana Gomez | Total: $10.576,72
    - Moto g85 5g x2 @ $4.444,00

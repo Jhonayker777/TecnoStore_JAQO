@@ -4,8 +4,6 @@ CREATE DATABASE TecnoStore_JAQO;
 
 USE TecnoStore_JAQO;
 
-
-
 CREATE TABLE marcas (
     id     INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
@@ -43,7 +41,7 @@ CREATE TABLE clientes (
 
 CREATE TABLE empleados (
     persona_id     INT PRIMARY KEY,
-    cargo          ENUM('Vendedor','Admin','Bodega','Gerente') NOT NULL,
+    cargo          ENUM('Admin','Bodega','Gerente') NOT NULL,
     salario        DOUBLE NOT NULL,
     fecha_ingreso  DATE NOT NULL,
     activo         BOOLEAN NOT NULL DEFAULT TRUE,
@@ -149,4 +147,7 @@ CREATE INDEX idx_detalle_celular ON detalle_ventas(celular_id);
 CREATE INDEX idx_celulares_stock ON celulares(stock);
 CREATE INDEX idx_celulares_gama  ON celulares(gama_id);
 
-
+insert into personas (id, nombre, identificacion, correo, telefono, tipo) values
+('Admin Principal', '1234567890', 'admin@tecnostore.com', '1122334455', 'EMPLEADO');
+insert into empleados (persona_id, cargo, salario, fecha_ingreso, activo, contraseña) values
+(1, 'Admin', 5000, CURDATE(), TRUE, 'Admin123');

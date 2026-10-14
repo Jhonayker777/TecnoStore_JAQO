@@ -10,23 +10,24 @@ import View.VistaTienda;
 
 public class TiendaControl {
 
-    private Carrito carrito;
-    private Cliente cliente;
+    private final Carrito carrito;
+    private final Cliente cliente;
 
-    ClientesDao clienteDao = new ClientesDao();
-    CelularDao celularDao = new CelularDao();
+    private final ClientesDao clienteDao = new ClientesDao();
+    private final CelularDao celularDao = new CelularDao();
 
-    VistaTienda tiendaVista;
-    VistaClientes clienteVista = new VistaClientes();
-    VistaCelulares celularVista = new VistaCelulares();
+    private final VistaTienda tiendaVista;
+    private final VistaClientes clienteVista = new VistaClientes();
+    private final VistaCelulares celularVista = new VistaCelulares();
 
-    CelularesControl celular = new CelularesControl();
-    CarritoControl carritoControl = new CarritoControl(cliente, carrito);
+    private final CelularesControl celular = new CelularesControl();
+    private final CarritoControl carritoControl; 
 
     public TiendaControl(Cliente cliente, Carrito carrito) {
         this.cliente = cliente;
         this.carrito = carrito;
         this.tiendaVista = new VistaTienda(carrito);
+        this.carritoControl = new CarritoControl(cliente, carrito);
     }
 
     public void menu() {
@@ -34,35 +35,16 @@ public class TiendaControl {
         do {
             op = tiendaVista.principal();
             switch (op) {
-                case 1 -> {
-                    catalogo();
-                }
-                case 2 -> {
-                    buscarCelular();
-                }
-                case 3 -> {
-                    filtrarMarca();
-                }
-                case 4 -> {
-                    filtrarGama();
-                }
-                case 5 -> {
-                    carrito();
-                }
-                case 6 -> {
-                    System.out.println("Mis compras");
-                }
-                case 7 -> {
-                    System.out.println(cliente);
-                }
-                case 8 -> {
-                    cambiarContraseña();
-                }
-                case 0 -> {
-                }
-                default -> {
-                    System.out.println("Opcion no encontrada!");
-                }
+                case 1 -> catalogo();
+                case 2 -> buscarCelular();
+                case 3 -> filtrarMarca();
+                case 4 -> filtrarGama();
+                case 5 -> carrito();
+                case 6 -> System.out.println("Mis compras");
+                case 7 -> System.out.println(cliente);
+                case 8 -> cambiarContraseña();
+                case 0 -> { }
+                default -> System.out.println("Opción no encontrada");
             }
         } while (op != 0);
     }

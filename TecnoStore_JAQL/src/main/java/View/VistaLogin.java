@@ -21,14 +21,17 @@ public class VistaLogin {
         System.out.println("""
                                 TECNO STORE
                                 INICIO DE SESION
+                           
                            """);
     }
 
     public int general() {
         return entrada.entero("""
+                              
                               1- Cliente.
                               2- Empleado.
                               0- Salir.
+                              
                               """);
     }
 

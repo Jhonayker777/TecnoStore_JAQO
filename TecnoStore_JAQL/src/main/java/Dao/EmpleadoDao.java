@@ -21,17 +21,17 @@ public class EmpleadoDao {
         try (Connection con = c.conexion()) {
             String sql = "call sp_crear_empleado(?,?,?,?,?,?,?,?)";
             CallableStatement ps = con.prepareCall(sql);
+
             ps.setString(1, empleado.getNombre());
             ps.setString(2, empleado.getIdentificacion());
             ps.setString(3, empleado.getCorreo());
             ps.setString(4, empleado.getTelefono());
             ps.setString(5, empleado.getCargo().getEtiqueta());
             ps.setDouble(6, empleado.getSalario());
-            ps.setDate(7, empleado.getFechaIngreso());
-            ps.setString(8, empleado.getContraseña());
-            ps.registerOutParameter(9, Types.INTEGER);
+            ps.setString(7, empleado.getContraseña());
+            ps.registerOutParameter(8, Types.INTEGER);
             ps.execute();
-            empleado.setId(ps.getInt(9));
+            empleado.setId(ps.getInt(8));
 
             System.out.println("Empleado creado correctamente! xD");
         } catch (Exception e) {
@@ -43,10 +43,11 @@ public class EmpleadoDao {
 
     public void activar(long id) {
         try (Connection con = c.conexion()) {
-            String sql = "update empleados set activo=1 where id=?";
+            String sql = "update empleados set activo=1 where persona_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, id);
             ps.executeUpdate();
+            System.out.println("Empleado activado correctamente");
         } catch (SQLException e) {
             System.out.println("Error al activar empleado: " + e.getMessage());
         }
@@ -54,10 +55,11 @@ public class EmpleadoDao {
 
     public void desactivar(long id) {
         try (Connection con = c.conexion()) {
-            String sql = "update empleados set activo=0 where id=?";
+            String sql = "update empleados set activo=0 where persona_id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setLong(1, id);
             ps.executeUpdate();
+            System.out.println("Empleado desactivado correctamente");
         } catch (SQLException e) {
             System.out.println("Error al desacactivar empleado: " + e.getMessage());
         }
@@ -65,7 +67,7 @@ public class EmpleadoDao {
 
     public void actualizarDatos(Empleado empleado) {
         try (Connection con = c.conexion()) {
-            CallableStatement ps = con.prepareCall("call sp_actualizar_empleado(?,?,?,?,?,?,?,?)");
+            CallableStatement ps = con.prepareCall("call sp_actualizar_empleado(?,?,?,?,?,?,?)");
             ps.setLong(1, empleado.getId());
             ps.setString(2, empleado.getNombre());
             ps.setString(3, empleado.getIdentificacion());
@@ -73,8 +75,6 @@ public class EmpleadoDao {
             ps.setString(5, empleado.getTelefono());
             ps.setString(6, empleado.getCargo().getEtiqueta());
             ps.setDouble(7, empleado.getSalario());
-            ps.setDate(8, empleado.getFechaIngreso());
-            ps.setString(9, empleado.getContraseña());
             ps.executeUpdate();
             System.out.println("Empleado actualizado correctamente!");
         } catch (Exception e) {

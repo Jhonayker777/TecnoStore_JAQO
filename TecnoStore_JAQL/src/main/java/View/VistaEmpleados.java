@@ -36,10 +36,9 @@ public class VistaEmpleados {
                               1. Ver catalogo
                               2. Gestion de celulares 
                               3. Gestion de clientes
-                              4. Registrar venta
-                              5. ver ventas
-                              6. Reportes
-                              7. Gestion de precios
+                              4. ver ventas
+                              5. Reportes
+                              6. Gestion de precios
                               0. Cerrar sesion
                               """);
     }
@@ -47,37 +46,41 @@ public class VistaEmpleados {
     public int gerente() {
 
         return entrada.entero("""
+                              
                               1. Ver catalogo
                               2. Gestion de celulares 
                               3. Gestion de clientes
-                              4. Registrar venta
-                              5. ver ventas
-                              6. Reportes
-                              7. Gestion de precios
-                              8. Gestion de empleados
+                              4. ver ventas
+                              5. Reportes
+                              6. Gestion de precios
+                              7. Gestion de empleados
                               0. Cerrar sesion
+                              
                               """);
     }
 
-    public int empleado() {
+    public int gestionEmpleado() {
 
         return entrada.entero("""
+                              
                               1. Registrar 
                               2. Actualizar
                               3. Cambiar estado 
                               4. Listar
+                              0. Volver
+                              
                               """);
     }
 
-    public boolean estado() {
-        int op = entrada.entero("""
+    public int estado() {
+        return entrada.entero("""
+                              
+                            ESCOJA LA ACCION
                             1.Activar
                             2.Desactivar
+                            0.Regresar
                             """);
-        while (op > 2 || op < 1) {
-            op = entrada.entero("Opcion no valida");
-        }
-        return 1 == op ? true : false;
+
     }
 
     public void listar(List<Empleado> lista) {
@@ -99,7 +102,6 @@ public class VistaEmpleados {
                 .telefono(entrada.texto("Ingrese el telefono del empleado"))
                 .cargo(vistaCargo.escogerCargo())
                 .salario(entrada.decimal("Ingrese el salario del empeado"))
-                .fechaIngreso(Date.valueOf(entrada.texto("Escriba la fecha de ingreso(formato yyy-mm-dd)")))
                 .contraseña(entrada.texto("Ingrese su caontraseña"))
                 .build();
     }
@@ -114,8 +116,6 @@ public class VistaEmpleados {
                 .telefono(entrada.texto("Ingrese el telefono del empleado"))
                 .cargo(vistaCargo.escogerCargo())
                 .salario(entrada.decimal("Ingrese el salario del empeado"))
-                .fechaIngreso(Date.valueOf(entrada.texto("Escriba la fecha de ingreso(formato yyy-mm-dd)")))
-                .contraseña(entrada.texto("Ingrese su caontraseña"))
                 .build();
     }
 

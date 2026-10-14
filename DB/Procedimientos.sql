@@ -465,7 +465,6 @@ CREATE PROCEDURE sp_crear_empleado(
     IN  p_telefono       VARCHAR(20),
     IN  p_cargo          VARCHAR(20),
     IN  p_salario        DOUBLE,
-    IN  p_fecha_ingreso  DATE,
     IN  p_contraseña     VARCHAR(20),
     OUT p_persona_id     INT
 )
@@ -484,7 +483,7 @@ BEGIN
     SET p_persona_id = LAST_INSERT_ID();
 
     INSERT INTO empleados (persona_id, cargo, salario,  fecha_ingreso, activo, contraseña)
-    VALUES (p_persona_id, p_cargo, p_salario, p_fecha_ingreso, TRUE, p_contraseña);
+    VALUES (p_persona_id, p_cargo, p_salario, NOW(), TRUE, p_contraseña);
 
     COMMIT;
 END¬¬

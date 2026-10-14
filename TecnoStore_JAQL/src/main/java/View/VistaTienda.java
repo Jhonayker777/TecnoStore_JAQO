@@ -39,6 +39,7 @@ public class VistaTienda {
                               7. Mi perfil
                               8. Cambiar contraseña
                               0. Cerrar sesion
+                              
                               """);
 
     }

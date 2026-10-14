@@ -8,10 +8,10 @@ public class EmpleadosControl {
     VistaEmpleados vistaEmpleados = new VistaEmpleados();
     EmpleadoDao empleadoDao = new EmpleadoDao();
 
-    public void administrar() {
+    public void menu() {
         int op;
         do {
-            op = vistaEmpleados.administrador();
+            op = vistaEmpleados.gestionEmpleado();
             switch (op) {
                 case 1 -> {
                     registrar();
@@ -19,10 +19,10 @@ public class EmpleadosControl {
                 case 2 -> {
                     actualizar();
                 }
-                case 4 -> {
+                case 3 -> {
                     estado();
                 }
-                case 5 -> {
+                case 4 -> {
                     listar();
                 }
                 case 0 -> {
@@ -49,11 +49,25 @@ public class EmpleadosControl {
     private void estado() {
 
         if (listar()) {
-            if (vistaEmpleados.estado()) {
-                empleadoDao.activar(vistaEmpleados.pedirId());
-            }else{
-                empleadoDao.desactivar(vistaEmpleados.pedirId());
-            }
+            int op;
+            do {
+                op = vistaEmpleados.estado();
+                switch (op) {
+                    case 1 -> {
+                        empleadoDao.activar(vistaEmpleados.pedirId());
+                    }
+                    case 2 -> {
+                        empleadoDao.desactivar(vistaEmpleados.pedirId());
+                    }
+                    case 0 -> {
+                        System.out.println("Saliendo");
+                    }
+                    default -> {
+                        System.out.println("Opcion no encontrada!");
+                    }
+                }
+
+            } while (op != 0);
         }
     }
 
