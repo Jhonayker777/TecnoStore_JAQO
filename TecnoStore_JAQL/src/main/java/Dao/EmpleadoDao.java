@@ -1,7 +1,6 @@
 package Dao;
 
 import Model.Cargo;
-import Model.Celular;
 import Model.Empleado;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -138,6 +137,7 @@ public class EmpleadoDao {
                         .activo(rs.getBoolean(9))
                         .build());
             }
+            return lista;
 
         } catch (SQLException e) {
             System.out.println("Error al listar clientes" + e);

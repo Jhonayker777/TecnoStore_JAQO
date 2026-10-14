@@ -4,7 +4,6 @@ import Dao.CelularDao;
 import Model.Carrito;
 import Model.Celular;
 import Model.CelularVenta;
-import Model.Cliente;
 import View.validaciones.Decimal;
 import View.validaciones.Entero;
 import View.validaciones.Entrada;

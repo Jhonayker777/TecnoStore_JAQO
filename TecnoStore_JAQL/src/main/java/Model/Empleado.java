@@ -25,10 +25,6 @@ public class Empleado extends Persona {
         return "EMPLEADO";
     }
 
-    public boolean puedeRegistrarVentas() {
-        return activo && cargo == Cargo.VENDEDOR;
-    }
-
     public Cargo getCargo() {
         return cargo;
     }
@@ -60,15 +56,14 @@ public class Empleado extends Persona {
     public String getContraseña() {
         return contraseña;
     }
-    
-    public String isActivo(){
-        if(activo == true){
+
+    public String isActivo() {
+        if (activo == true) {
             return "activo";
         }
         return "inactivo";
     }
-    
-    
+
     public Builder toBuilder() {
         return new Builder()
                 .id(this.getId())
@@ -153,11 +148,11 @@ public class Empleado extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() +"""
+        return super.toString() + """
                                  Cargo: %s
                                  Salario: %S
                                  Fecha_Ingreso: %S
                                  Estado: %s
-                                 """.formatted(cargo.getEtiqueta(),salario,fechaIngreso,isActivo());
+                                 """.formatted(cargo.getEtiqueta(), salario, fechaIngreso, isActivo());
     }
 }

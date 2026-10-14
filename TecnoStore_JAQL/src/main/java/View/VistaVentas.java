@@ -1,9 +1,11 @@
 package View;
 
+import Model.Venta;
 import View.validaciones.Decimal;
 import View.validaciones.Entero;
 import View.validaciones.Entrada;
 import View.validaciones.Texto;
+import java.util.List;
 import java.util.Scanner;
 
 public class VistaVentas {
@@ -28,8 +30,14 @@ public class VistaVentas {
         String conf = entrada.texto("¿Confirmar compra? (s/n): ");
         return conf.equalsIgnoreCase("s");
     }
-    
-    public int pedirId(){
+
+    public int pedirId() {
         return entrada.entero("Ingrese el id del prodcuto a eliminar");
+    }
+
+    public void listar(List<Venta> lista) {
+        System.out.println("------------------Ventas----------------------");
+        lista.forEach(System.out::println);
+        System.out.println("-----------------------------------------------");
     }
 }

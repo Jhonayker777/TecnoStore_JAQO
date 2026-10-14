@@ -3,13 +3,10 @@ package Control;
 import Dao.CelularDao;
 import Dao.ClientesDao;
 import Model.Carrito;
-import Model.CelularVenta;
 import Model.Cliente;
 import View.VistaCelulares;
 import View.VistaClientes;
 import View.VistaTienda;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TiendaControl {
 

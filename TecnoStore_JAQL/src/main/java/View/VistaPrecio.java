@@ -19,6 +19,16 @@ public class VistaPrecio {
 
     PreciosDao p = new PreciosDao();
 
+    public int menu() {
+        return entrada.entero("""
+                       1. Crear
+                       2. Actualizar
+                       3. Eliminar
+                       4. Listar
+                       0. Salir
+                       """);
+    }
+
     public Precio escogerPrecio() {
         if (p.listar() != null) {
             listar(p.listar());
@@ -39,5 +49,20 @@ public class VistaPrecio {
         System.out.println("------------------Precios----------------------");
         lista.forEach(System.out::println);
         System.out.println("-----------------------------------------------");
+    }
+
+    public Precio crearPrecio() {
+        return new Precio(entrada.texto("Ingrese el nombre del precio"),
+                entrada.decimal("Ingrese el monto del precio"));
+    }
+
+    public Precio ActualizarPrecio() {
+        return new Precio(entrada.entero("Ingrese el id del precio a actualizar"),
+                entrada.texto("Ingrese el nombre del precio"),
+                entrada.decimal("Ingrese el monto del precio"));
+    }
+
+    public long eliminar() {
+        return entrada.enteroGrande("Ingrese el id del precio a eliminar");
     }
 }

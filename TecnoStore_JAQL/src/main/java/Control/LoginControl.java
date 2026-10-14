@@ -7,9 +7,9 @@ import Model.Cliente;
 import Model.Empleado;
 import View.VistaClientes;
 import View.VistaLogin;
-import java.util.List;
 
 public class LoginControl {
+
     private Carrito carrito = new Carrito();
 
     VistaClientes vistaClientes = new VistaClientes();
@@ -61,12 +61,9 @@ public class LoginControl {
 
         if (sesion != null) {
             String cargo = sesion.getCargo().getEtiqueta();
-            EmpleadosControl empleado = new EmpleadosControl(sesion);
+            EmpresaControl empleado = new EmpresaControl(sesion);
 
             switch (cargo) {
-                case "Vendedor" -> {
-                    empleado.vededor();
-                }
                 case "Admin" -> {
                     empleado.administrador();
                 }

@@ -1,48 +1,32 @@
 package Control;
 
-import Dao.ClientesDao;
-import Model.Empleado;
+import Dao.EmpleadoDao;
 import View.VistaEmpleados;
 
 public class EmpleadosControl {
 
-    ClienteControl celientControl = new ClienteControl();
-    CelularesControl celular = new CelularesControl();
-    VistaEmpleados vista = new VistaEmpleados();
-    private Empleado sesion;
+    VistaEmpleados vistaEmpleados = new VistaEmpleados();
+    EmpleadoDao empleadoDao = new EmpleadoDao();
 
-    public EmpleadosControl(Empleado sesion) {
-        this.sesion = sesion;
-    }
-
-    public void gerente() {
+    public void administrar() {
         int op;
         do {
-            op = vista.gerente();
+            op = vistaEmpleados.administrador();
             switch (op) {
                 case 1 -> {
-                    celular.catalogo();
+                    registrar();
                 }
                 case 2 -> {
-                    celular.administrador();
+                    actualizar();
                 }
-                case 3 -> {
-                    celientControl.administrar();
+                case 4 -> {
+                    estado();
                 }
                 case 5 -> {
-                    System.out.println("Ver ventas");
-                }
-                case 6 -> {
-                    System.out.println("Reportes");
-                }
-                case 7 -> {
-                    System.out.println("Gestion precios");
-                }
-                case 8 -> {
-                    System.out.println("Gestion empleados");
+                    listar();
                 }
                 case 0 -> {
-                    System.out.println("Cerrando sesion...");
+                    System.out.println("Saliendo");
                 }
                 default -> {
                     System.out.println("Opcion no encontrada!");
@@ -51,79 +35,35 @@ public class EmpleadosControl {
         } while (op != 0);
     }
 
-    public void administrador() {
-        int op;
-        do {
-            op = vista.administrador();
-            switch (op) {
-                case 1 -> {
-                    celular.catalogo();
-                }
-                case 2 -> {
-                    celular.administrador();
-                }
-                case 3 -> {
-                    celientControl.administrar();
-                }
-                case 5 -> {
-                    System.out.println("Ver ventas");
-                }
-                case 6 -> {
-                    System.out.println("Reportes");
-                }
-                case 7 -> {
-                    System.out.println("Gestion precios");
-                }
-                case 0 -> {
-                    System.out.println("Cerrando sesion...");
-                }
-                default -> {
-                    System.out.println("Opcion no encontrada!");
-                }
-            }
-        } while (op != 0);
+    private void registrar() {
+        empleadoDao.registrar(vistaEmpleados.registrar());
     }
 
-    public void vededor() {
-        int op;
-        do {
-            op = vista.vendedor();
-            switch (op) {
-                case 1 -> {
-                    celular.catalogo();
-                }
-                case 3 -> {
-                    System.out.println("ver ventas");
-                }
-                case 0 -> {
-                    System.out.println("Cerrando sesion...");
-                }
-                default -> {
-                    System.out.println("Opcion no encontrada!");
-                }
-            }
-        } while (op != 0);
+    private void actualizar() {
+
+        if (listar()) {
+            empleadoDao.actualizarDatos(vistaEmpleados.actualizar());
+        }
     }
 
-    public void bodega() {
-        int op;
-        do {
-            op = vista.bodega();
-            switch (op) {
-                case 1 -> {
-                    celular.catalogo();
-                }
-                case 2 -> {
-                    celular.administrador();
-                }
-                case 0 -> {
-                    System.out.println("Cerrando sesion...");
-                }
-                default -> {
-                    System.out.println("Opcion no encontrada!");
-                }
+    private void estado() {
+
+        if (listar()) {
+            if (vistaEmpleados.estado()) {
+                empleadoDao.activar(vistaEmpleados.pedirId());
+            }else{
+                empleadoDao.desactivar(vistaEmpleados.pedirId());
             }
-        } while (op != 0);
+        }
     }
 
+    private boolean listar() {
+        if (!empleadoDao.listar().isEmpty()) {
+            vistaEmpleados.listar(empleadoDao.listar());
+            return true;
+        } else {
+            System.out.println("No hay empleados para listar");
+            return false;
+        }
+    }
 }
