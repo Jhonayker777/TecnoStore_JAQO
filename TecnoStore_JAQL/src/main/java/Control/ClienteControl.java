@@ -64,16 +64,11 @@ public class ClienteControl {
     protected void listar() {
         if (clientesDao.listar() != null) {
             clienteVista.mostrar(clientesDao.listar());
-<<<<<<< HEAD
         } else {
-=======
-        }else{
->>>>>>> 673be06c8c8aca8d70ca23c23fc57804078ad080
             System.out.println("No hay clientes registrados");
         }
     }
 
-<<<<<<< HEAD
     protected void buscarDocuemnto() {
         String op = entrada.texto("Ingrese la identificacion");
         Cliente cliente = clientesDao.buscarDocumento(op);
@@ -85,6 +80,4 @@ public class ClienteControl {
 
     }
 
-=======
->>>>>>> 673be06c8c8aca8d70ca23c23fc57804078ad080
 }

@@ -1,18 +1,12 @@
 package Control;
 
-<<<<<<< HEAD
 import Dao.ClientesDao;
-=======
->>>>>>> 673be06c8c8aca8d70ca23c23fc57804078ad080
 import Model.Empleado;
 import View.VistaEmpleados;
 
 public class EmpleadosControl {
 
-<<<<<<< HEAD
     ClienteControl celientControl = new ClienteControl();
-=======
->>>>>>> 673be06c8c8aca8d70ca23c23fc57804078ad080
     CelularesControl celular = new CelularesControl();
     VistaEmpleados vista = new VistaEmpleados();
     private Empleado sesion;
